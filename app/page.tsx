@@ -549,9 +549,9 @@ export default function Home() {
             <Card className="p-6">
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <img src="/african-woman-farmer.png" alt="Kayitare Alexis" className="w-12 h-12 rounded-full" />
+                  <img src="/african-woman-farmer.png" alt="Kayitare Alexis M." className="w-12 h-12 rounded-full" />
                   <div>
-                    <h4 className="font-semibold text-foreground">Kayitare Alexis</h4>
+                    <h4 className="font-semibold text-foreground">Kayitare Alexis M.</h4>
                     <p className="text-sm text-muted-foreground">Vegetable Farmer, Nyagatare</p>
                   </div>
                 </div>

@@ -83,6 +83,7 @@ export function DashboardSidebar() {
     <Sidebar className="border-r">
       <SidebarHeader className="p-4">
         <Link href="/" className="flex items-center space-x-2">
+          <img src="/favicon.png" alt="UmuhinziLink Logo" className="h-8 w-8" />
           <span className="text-xl font-bold text-green-600">UmuhinziLink</span>
         </Link>
       </SidebarHeader>

@@ -11,9 +11,9 @@ export const metadata: Metadata = {
     "Empowering smallholder farmers in Rwanda with Technology to access markets, get AI-powered farming advice and secure agricultural loans",
   generator: "v0.app",
   icons: {
-    icon: '/favicon.jpg',
-    shortcut: '/favicon.jpg',
-    apple: '/favicon.jpg',
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
   },
 }
 
@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.jpg" />
+        <link rel="icon" href="/favicon.png" />
         <style>{`
 html {
   font-family: ${GeistSans.style.fontFamily};

@@ -81,7 +81,7 @@ export default function LoginPage() {
         {/* Logo and Header */}
         <div className="text-center space-y-2">
           <Link href="/" className="flex items-center justify-center gap-2 text-2xl font-bold text-green-600">
-            <Sprout className="h-8 w-8" />
+            <img src="/favicon.png" alt="UmuhinziLink Logo" className="h-10 w-10" />
             UmuhinziLink
           </Link>
           <p className="text-muted-foreground">

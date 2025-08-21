@@ -11,7 +11,7 @@ const products = [
   {
     id: 1,
     name: "Fresh Tomatoes",
-    image: "/fresh-red-tomatoes.png",
+    image: "/tomatoes.jpg",
     quantity: "50 kg",
     price: "50 RWF/kg",
     location: "Kigali",
@@ -20,7 +20,7 @@ const products = [
   {
     id: 2,
     name: "Green Beans",
-    image: "/fresh-green-beans.png",
+    image: "/green-beans.jpg",
     quantity: "30 kg",
     price: "35 RWF/kg",
     location: "Musanze",
@@ -47,7 +47,7 @@ const products = [
   {
     id: 5,
     name: "Fresh Cabbage",
-    image: "/fresh-green-cabbage.png",
+    image: "/fresh-cabbage.png",
     quantity: "40 heads",
     price: "25 RWF/head",
     location: "Rubavu",
@@ -56,7 +56,7 @@ const products = [
   {
     id: 6,
     name: "Irish Potatoes",
-    image: "/fresh-potatoes.png",
+    image: "/irish-potatoes.png",
     quantity: "80 kg",
     price: "50 RWF/kg",
     location: "Ruhengeri",

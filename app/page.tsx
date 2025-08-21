@@ -2,6 +2,7 @@ import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 import {
   Users,
   TrendingUp,
@@ -42,9 +43,11 @@ export default function Home() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white">
-                  Get Started
-                </Button>
+                <Link href="/login">
+                  <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white">
+                    Get Started
+                  </Button>
+                </Link>
                 <Button size="lg" variant="outline">
                   View Demo
                 </Button>
@@ -81,15 +84,11 @@ export default function Home() {
       <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="relative">
+            <div className="relative pb-8 pr-8">
               <div className="relative">
                 <img src="/african-farmer-woman.png" alt="Farmer working in field" className="rounded-lg shadow-xl" />
-                <div className="absolute -bottom-6 -right-6 w-32 h-32">
-                  <img 
-                    src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
-                    alt="Fresh produce basket" 
-                    className="rounded-full shadow-lg w-32 h-32 object-cover" 
-                  />
+                <div className="absolute -bottom-4 -right-4 w-24 h-24">
+                  <img src="/market.jpg" alt="Fresh produce basket" className="rounded-full shadow-lg border-4 border-white" />
                 </div>
               </div>
             </div>
@@ -510,11 +509,7 @@ export default function Home() {
             <Card className="p-6">
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <img 
-                    src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
-                    alt="Marie Uwimana" 
-                    className="w-12 h-12 rounded-full object-cover" 
-                  />
+                  <img src="/african-woman-farmer.png" alt="Marie Uwimana" className="w-12 h-12 rounded-full" />
                   <div>
                     <h4 className="font-semibold text-foreground">Marie Uwimana</h4>
                     <p className="text-sm text-muted-foreground">Maize Farmer, Nyagatare</p>
@@ -530,11 +525,7 @@ export default function Home() {
             <Card className="p-6">
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <img 
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
-                    alt="Jean Baptiste" 
-                    className="w-12 h-12 rounded-full object-cover" 
-                  />
+                  <img src="/african-woman-farmer.png" alt="Jean Baptiste" className="w-12 h-12 rounded-full" />
                   <div>
                     <h4 className="font-semibold text-foreground">Jean Baptiste</h4>
                     <p className="text-sm text-muted-foreground">Bean Farmer, Nyagatare</p>
@@ -549,9 +540,9 @@ export default function Home() {
             <Card className="p-6">
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <img src="/african-woman-farmer.png" alt="Kayitare Alexis M." className="w-12 h-12 rounded-full" />
+                  <img src="/african-woman-farmer.png" alt="Agnes Mukamana" className="w-12 h-12 rounded-full" />
                   <div>
-                    <h4 className="font-semibold text-foreground">Kayitare Alexis M.</h4>
+                    <h4 className="font-semibold text-foreground">Agnes Mukamana</h4>
                     <p className="text-sm text-muted-foreground">Vegetable Farmer, Nyagatare</p>
                   </div>
                 </div>
@@ -575,9 +566,11 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" className="bg-white text-green-600 hover:bg-green-50">
-                📱 Get Started - Farmers
-              </Button>
+              <Link href="/login">
+                <Button size="lg" variant="secondary" className="bg-white text-green-600 hover:bg-green-50">
+                  📱 Get Started - Farmers
+                </Button>
+              </Link>
               <Button
                 size="lg"
                 variant="outline"

@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Moon, Sun, Menu, X } from "lucide-react"
 import { useTheme } from "next-themes"
+import Link from "next/link"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -22,7 +23,9 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
-            <span className="text-xl font-bold text-green-600">UmuhinziLink</span>
+            <Link href="/" className="text-xl font-bold text-green-600">
+              UmuhinziLink
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -66,7 +69,9 @@ export function Header() {
               <span className="sr-only">Toggle theme</span>
             </Button>
 
-            <Button className="hidden md:inline-flex bg-green-600 hover:bg-green-700 text-white">Get Started</Button>
+            <Link href="/login">
+              <Button className="hidden md:inline-flex bg-green-600 hover:bg-green-700 text-white">Get Started</Button>
+            </Link>
 
             {/* Mobile menu button */}
             <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -110,7 +115,9 @@ export function Header() {
                 Contact Us
               </button>
               <div className="px-3 py-2">
-                <Button className="w-full bg-green-600 hover:bg-green-700 text-white">Get Started</Button>
+                <Link href="/login">
+                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white">Get Started</Button>
+                </Link>
               </div>
             </div>
           </div>

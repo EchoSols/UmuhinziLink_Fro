@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AlertTriangle, Bookmark, Eye, Send, Brain } from "lucide-react"
+import { AlertTriangle, Bookmark, Eye, Send, Brain, Wheat } from "lucide-react"
 
 const tips = [
   {
@@ -132,7 +132,7 @@ export default function AITips() {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-900/20 rounded-full flex items-center justify-center">
-                      <span className="text-yellow-600">🌾</span>
+                      <Wheat className="h-4 w-4 text-yellow-600" />
                     </div>
                     <div>
                       <h3 className="font-semibold">{tip.title}</h3>

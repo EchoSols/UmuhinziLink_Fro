@@ -31,6 +31,7 @@ import {
   Phone,
   Settings,
   LogOut,
+  MapPin,
 } from "lucide-react"
 
 const sidebarItems = [
@@ -112,7 +113,7 @@ export default function DashboardLayout({
               </Button>
             </div>
           </SidebarHeader>
-          <SidebarContent className="px-3 py-4">
+          <SidebarContent className="px-3 py-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             <nav className="space-y-2">
               {sidebarItems.map((item) => {
                 const isActive = pathname === item.href
@@ -173,8 +174,9 @@ export default function DashboardLayout({
                   <p className="text-sm font-semibold text-foreground truncate">
                     {currentUser.name}
                   </p>
-                  <p className="text-xs text-muted-foreground truncate">
-                    📍 {currentUser.location}
+                  <p className="text-xs text-muted-foreground truncate flex items-center gap-1">
+                    <MapPin className="h-3 w-3" />
+                    {currentUser.location}
                   </p>
                 </div>
               </div>

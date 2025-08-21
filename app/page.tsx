@@ -17,6 +17,11 @@ import {
   WifiOff,
   Globe,
   Archive,
+  Sprout,
+  Smartphone,
+  Building2,
+  Heart,
+  MessageSquare,
 } from "lucide-react"
 
 export default function Home() {
@@ -69,12 +74,17 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="relative">
-              <img
-                src="/african-woman-farmer.png"
-                alt="Smiling farmer with fresh produce"
-                className="rounded-lg shadow-2xl"
-              />
+            <div className="relative flex justify-center lg:justify-end">
+              <div className="relative">
+                <img
+                  src="/african-woman-farmer.png"
+                  alt="Smiling farmer with fresh produce"
+                  className="w-80 h-80 lg:w-96 lg:h-96 rounded-full object-cover shadow-2xl border-4 border-white/20"
+                />
+                {/* Decorative elements for better visual appeal */}
+                <div className="absolute -top-4 -right-4 w-8 h-8 bg-green-400 rounded-full opacity-20"></div>
+                <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-green-300 rounded-full opacity-30"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -86,9 +96,17 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative pb-8 pr-8">
               <div className="relative">
-                <img src="/african-farmer-woman.png" alt="Farmer working in field" className="rounded-lg shadow-xl" />
-                <div className="absolute -bottom-4 -right-4 w-24 h-24">
-                  <img src="/market.jpg" alt="Fresh produce basket" className="rounded-full shadow-lg border-4 border-white" />
+                <img 
+                  src="/african-farmer-woman.png" 
+                  alt="Farmer working in field" 
+                  className="w-full h-96 lg:h-[28rem] rounded-full object-cover shadow-xl border-4 border-white/20" 
+                />
+                <div className="absolute -bottom-6 -right-6 w-32 h-32">
+                  <img 
+                    src="/market.jpg" 
+                    alt="Fresh produce basket" 
+                    className="w-full h-full rounded-full object-cover shadow-lg border-4 border-white" 
+                  />
                 </div>
               </div>
             </div>
@@ -568,7 +586,8 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/login">
                 <Button size="lg" variant="secondary" className="bg-white text-green-600 hover:bg-green-50">
-                  📱 Get Started - Farmers
+                  <Smartphone className="mr-2 h-4 w-4" />
+                  Get Started - Farmers
                 </Button>
               </Link>
               <Button
@@ -576,14 +595,16 @@ export default function Home() {
                 variant="outline"
                 className="border-white text-white hover:bg-white hover:text-green-600 bg-transparent"
               >
-                🏢 Join as Business
+                <Building2 className="mr-2 h-4 w-4" />
+                Join as Business
               </Button>
               <Button
                 size="lg"
                 variant="outline"
                 className="border-white text-white hover:bg-white hover:text-green-600 bg-transparent"
               >
-                📞 SMS: +123-456
+                <MessageSquare className="mr-2 h-4 w-4" />
+                SMS: +123-456
               </Button>
             </div>
 
@@ -598,7 +619,8 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <span className="text-xl font-bold text-green-400">🌱 UmuhinziLink</span>
+                <Sprout className="h-6 w-6 text-green-400" />
+                <span className="text-xl font-bold text-green-400">UmuhinziLink</span>
               </div>
               <p className="text-slate-300 text-sm">
                 Empowering Rwandan farmers through digital agriculture and AI-powered solutions.
@@ -653,7 +675,10 @@ export default function Home() {
           </div>
 
           <div className="border-t border-slate-700 mt-12 pt-8 text-center text-sm text-slate-400">
-            <p>© 2024 UmuhinziLink. All rights reserved. Built for Rwandan farmers with ❤️</p>
+            <p className="flex items-center justify-center gap-2">
+              © 2025 UmuhinziLink. All rights reserved. Built for Rwandan farmers with 
+              <Heart className="h-4 w-4 text-red-500" />
+            </p>
           </div>
         </div>
       </footer>

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, User, Phone, Lock } from "lucide-react"
+import { Loader2, User, Phone, Lock, Sprout, Smartphone } from "lucide-react"
 import Link from "next/link"
 
 // Mock user data for farmers
@@ -80,8 +80,9 @@ export default function LoginPage() {
       <div className="w-full max-w-md space-y-6">
         {/* Logo and Header */}
         <div className="text-center space-y-2">
-          <Link href="/" className="text-2xl font-bold text-green-600">
-            🌱 UmuhinziLink
+          <Link href="/" className="flex items-center justify-center gap-2 text-2xl font-bold text-green-600">
+            <Sprout className="h-8 w-8" />
+            UmuhinziLink
           </Link>
           <p className="text-muted-foreground">
             Welcome back, farmer! Sign in to access your dashboard
@@ -178,9 +179,18 @@ export default function LoginPage() {
             <div className="space-y-2 text-sm text-muted-foreground bg-muted/50 p-4 rounded-lg">
               <p className="font-medium">Demo Accounts:</p>
               <div className="space-y-1">
-                <p>📱 +250788123456 / farmer123 (Marie)</p>
-                <p>📱 +250788654321 / farmer456 (Jean)</p>
-                <p>📱 +250788987654 / farmer789 (Agnes)</p>
+                <p className="flex items-center gap-2">
+                  <Smartphone className="h-4 w-4" />
+                  +250788123456 / farmer123 (Marie)
+                </p>
+                <p className="flex items-center gap-2">
+                  <Smartphone className="h-4 w-4" />
+                  +250788654321 / farmer456 (Jean)
+                </p>
+                <p className="flex items-center gap-2">
+                  <Smartphone className="h-4 w-4" />
+                  +250788987654 / farmer789 (Agnes)
+                </p>
               </div>
             </div>
           </CardContent>

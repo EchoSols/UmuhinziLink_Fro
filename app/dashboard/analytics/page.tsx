@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { TrendingUp, TrendingDown, Brain } from "lucide-react"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
+import { TrendingUp, TrendingDown, Brain, BarChart3 } from "lucide-react"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts"
 
 const priceData = [
   { month: "Jan", price: 300 },
@@ -37,7 +37,10 @@ export default function MarketAnalytics() {
           <h1 className="text-2xl font-bold text-foreground">Market Analytics</h1>
         </div>
         <div className="flex gap-4">
-          <Button variant="outline">📊 Filters</Button>
+          <Button variant="outline">
+            <BarChart3 className="mr-2 h-4 w-4" />
+            Filters
+          </Button>
           <Select>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="All Crops" />

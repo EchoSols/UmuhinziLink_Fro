@@ -19,32 +19,6 @@ UmuhinziLink is Rwanda's first comprehensive digital agriculture platform, desig
 
 To empower Rwandan farmers through digital agriculture solutions, providing access to markets, AI-powered farming advice, and financial services.
 
-## ✨ Key Features
-
-### 🌾 **For Farmers**
-
-- **📱 Mobile-First Design** - Optimized for smartphones with offline support
-- **🤖 AI-Powered Advisory** - Smart farming recommendations in Kinyarwanda
-- **🏪 Direct Market Access** - Connect directly with buyers and suppliers
-- **💳 Input Credit System** - Access agricultural loans and input financing
-- **📊 Market Analytics** - Real-time price trends and demand forecasting
-- **🌦️ Weather Integration** - Weather-based farming recommendations
-
-### 🏢 **For Suppliers & Buyers**
-
-- **📦 Inventory Management** - Real-time stock tracking and updates
-- **🤝 Farmer Matching** - Connect with farmers based on demand
-- **💰 Secure Payments** - Integrated payment processing
-- **📈 Sales Analytics** - Track performance and growth metrics
-
-### 🌍 **Platform Features**
-
-- **🇷🇼 Kinyarwanda Support** - Full platform support in local language
-- **📱 SMS Integration** - Works even in low-connectivity areas
-- **🌙 Dark/Light Mode** - Comfortable viewing in any lighting
-- **🔐 Secure Authentication** - Phone-based login system
-- **📊 Comprehensive Dashboard** - Intuitive farmer-focused interface
-
 ## 🛠️ Technology Stack
 
 ### **Frontend**
@@ -162,65 +136,6 @@ app/
 - Location-based listings
 - Status management (Available/Sold)
 
-## 🎨 Design System
-
-### **Colors**
-
-- **Primary:** Green (#22c55e) - Agriculture theme
-- **Secondary:** Blue, Orange, Purple for different sections
-- **Neutral:** Gray scale for text and backgrounds
-
-### **Typography**
-
-- **Primary:** Geist Sans (Clean, modern)
-- **Monospace:** Geist Mono (Code/data display)
-
-### **Components**
-
-- Consistent spacing (Tailwind CSS)
-- Rounded corners and subtle shadows
-- Hover states and smooth transitions
-- Mobile-responsive grid layouts
-
-## 🌍 Localization
-
-### **Supported Languages**
-
-- **English** - Primary interface language
-- **Kinyarwanda** - AI tips, SMS communications, and farmer interactions
-
-### **Cultural Considerations**
-
-- Rwanda-specific crop types (Amaru, Ibirayi, Inyama)
-- Local pricing in RWF (Rwandan Francs)
-- Regional locations (Kigali, Nyagatare, Musanze)
-- Agricultural seasons and practices
-
-## 📈 Impact & Success Stories
-
-### **Nyagatare Pilot Results**
-
-- **500+** Registered Farmers
-- **50+** Input Suppliers
-- **1000+** Transactions Completed
-- **30%** Average harvest improvement
-- **15%** Price increase for farmers
-
-### **Testimonials**
-
-> "UmuhinziLink helped me sell my maize directly to buyers at better prices. The SMS tips improved my harvest by 30%." - **Marie Uwimana**, Maize Farmer
-
-> "Getting credit for seeds through the platform was game-changing. Now I can plan my seasons better." - **Jean Baptiste**, Bean Farmer
-
-## 🚀 Deployment
-
-The application is deployed on **Vercel** with:
-
-- ✅ Automatic deployments from `main` branch
-- ✅ SSL certificate (HTTPS)
-- ✅ Global CDN for fast loading
-- ✅ Serverless functions support
-
 ### **Build Command**
 
 ```bash
@@ -233,34 +148,9 @@ npm run build
 - All data is client-side for demo purposes
 - Ready for production API integration
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **Rwanda Ministry of Agriculture** - For agricultural data and support
-- **Local Farmers** - For testing and feedback during development
-- **Nyagatare District** - Pilot program location
-- **shadcn/ui** - For beautiful UI components
-- **Vercel** - For seamless deployment platform
-
-## 📞 Contact & Support
-
-- **Website:** [umuhinzilink.vercel.app](https://umuhinzilink.vercel.app)
-- **Email:** support@umuhinzilink.rw
-- **Phone:** +250 788 123 456
-- **Location:** Kigali, Rwanda
-
----
 
 <div align="center">
 

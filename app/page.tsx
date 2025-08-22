@@ -604,7 +604,7 @@ export default function Home() {
                 className="border-white text-white hover:bg-white hover:text-green-600 bg-transparent"
               >
                 <MessageSquare className="mr-2 h-4 w-4" />
-                SMS: +123-456
+                SMS: +250 793 373 953
               </Button>
             </div>
 
@@ -652,11 +652,11 @@ export default function Home() {
               <div className="space-y-2 text-sm text-slate-300">
                 <div className="flex items-center gap-2">
                   <Phone className="h-4 w-4" />
-                  <span>+250 788 123 456</span>
+                  <span>+250 793 373 953</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="h-4 w-4" />
-                  <span>support@umuhinzilink.rw</span>
+                  <span>echhosolutions@gmail.com</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4" />

@@ -147,17 +147,17 @@ export default function Dashboard() {
             <div className="bg-white rounded-xl p-6 shadow-sm col-span-2">
               <h3 className="text-lg font-semibold mb-4 text-gray-900">AI Farming Tips</h3>
               <div className="space-y-3">
-                <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
-                  <p className="font-medium text-green-800">Umunamuro w'umweru</p>
-                  <p className="text-sm text-green-700">Ni igihe cyo gutera imbuto. Korera imbere imbere y'igihe kugira ngo uzane umusaruro mwiza.</p>
+                <div className="bg-green-50 border-l-5 border-green-200 p-4 rounded-lg">
+                  <p className="font-medium text-[#1F2937]">Umunamuro w'umweru</p>
+                  <p className="text-sm text-[#4B5563]">Ni igihe cyo gutera imbuto. Korera imbere imbere y'igihe kugira ngo uzane umusaruro mwiza.</p>
                 </div>
-                <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg">
-                  <p className="font-medium text-orange-800">Weather Alert</p>
-                  <p className="text-sm text-orange-700">Imvura irashobora kugwa mu minsi 3 iri imbere. Tegura uburyo bwo gukingira imbuto zawe.</p>
+                <div className="bg-[#f8f8f8] border-l-5 border-[#60A5FA] p-4 rounded-lg">
+                  <p className="font-medium text-[#1F2937]">Weather Alert</p>
+                  <p className="text-sm text-[#4B5563]">Imvura irashobora kugwa mu minsi 3 iri imbere. Tegura uburyo bwo gukingira imbuto zawe.</p>
                 </div>
-                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
-                  <p className="font-medium text-yellow-800">Market Price</p>
-                  <p className="text-sm text-yellow-700">Igiciro cy'inyanya cyiyongereye 15% mu kwezi gushize. Niba ushaka kugurisha, uyu ni umwanya mwiza.</p>
+                <div className="bg-yellow-50 border-l-5 border-yellow-200 p-4 rounded-lg">
+                  <p className="font-medium text-[#1F2937]">Market Price</p>
+                  <p className="text-sm text-[#4B5563]">Igiciro cy'inyanya cyiyongereye 15% mu kwezi gushize. Niba ushaka kugurisha, uyu ni umwanya mwiza.</p>
                 </div>
               </div>
             </div>

@@ -135,13 +135,13 @@ export default function Products() {
                 <div className="p-4">
                   <h3 className="font-bold text-lg mb-2 text-gray-900 ">{product.name}</h3>
                   <p className="text-sm text-gray-900 mb-1">
-                    Quantity: <span className="font-semibold ml-84">{product.quantity}</span>
+                    Quantity: <span className="ml-84">{product.quantity}</span>
                   </p>
                   <p className="text-sm text-gray-900 mb-1">
-                    Price: <span className="font-semibold ml-90">{product.price}</span>
+                    Price: <span className="ml-90 text-[#16A34A]">{product.price}</span>
                   </p>
                   <p className="text-sm text-gray-900 mb-4">
-                    Location: <span className="font-semibold ml-84">{product.location}</span>
+                    Location: <span className="ml-84">{product.location}</span>
                   </p>
                   <div className="flex gap-2">
                     <button className="bg-blue-100 text-blue-800 px-35 py-1 rounded-lg text-sm font-semibold flex items-center gap-1 hover:bg-blue-200 transition  cursor-pointer">

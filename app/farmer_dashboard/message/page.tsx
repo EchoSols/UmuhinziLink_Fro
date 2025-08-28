@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Plus, Search, Send } from "lucide-react";
+import { BiLeftArrow } from "react-icons/bi";
+import { useRouter } from "next/navigation";
 
 const mockContacts = [
   { id: 1, name: "John's Agro Store", role: "Supplier" },
@@ -64,12 +66,17 @@ export default function FarmerMessages() {
     setSearch("");
   };
 
+  const router = useRouter();
+
   return (
     <div className="flex h-screen bg-gray-100 text-gray-800">
       {/* Sidebar */}
       <div className="w-1/3 bg-white border-r border-gray-200 flex flex-col">
         <div className="p-4 flex items-center justify-between border-b border-gray-200 bg-green-600 text-white">
+          <div className="flex gap-2 items-center">
+          <BiLeftArrow className="size-5 text-white cursor-pointer" onClick={() => router.back()}/>
           <h2 className="text-lg font-semibold">Messages</h2>
+          </div>
           <button
             className="bg-white text-green-600 p-2 rounded-full hover:bg-gray-200 transition"
             onClick={() => setIsModalOpen(true)}

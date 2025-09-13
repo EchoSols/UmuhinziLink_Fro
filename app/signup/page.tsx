@@ -62,29 +62,35 @@ export default function SignUp() {
     <div className="w-full min-h-screen bg-gray-50 flex flex-col items-center">
       {/* Hero Section */}
       <div className="relative w-full h-72 sm:h-96 flex flex-col justify-center items-center text-center">
+        {/* Background Image */}
         <Image
           src="/image.png"
           alt="background"
           fill
-          className="object-cover w-full h-full"
+          className="absolute right-0 top-0 object-cover w-full h-full"
         />
+
         {/* Navbar */}
-        <div className="absolute top-4 left-0 right-0 max-w-5xl mx-auto flex justify-between items-center px-6 sm:px-8 z-10 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30">
+        <div className="absolute top-4 left-0 right-0 max-w-5xl mx-auto flex justify-between items-center px-6 sm:px-8 z-20">
           <h1 className="text-white font-bold text-lg">UmuhinziLink</h1>
           <div className="flex gap-6">
             {data.map((link, index) => (
-              <div key={index} className="flex items-center gap-2 text-white hover:text-green-400 transition">
+              <Link
+                key={index}
+                href={link.url}
+                className="flex items-center gap-2 text-white hover:text-green-400 transition text-xs font-medium"
+              >
                 {link.icon}
-                <Link href={link.url} className="text-xs font-medium">
-                  {link.name}
-                </Link>
-              </div>
+                {link.name}
+              </Link>
             ))}
           </div>
           <Button className="bg-white text-green-600 rounded-2xl px-4 py-2 hover:bg-green-50 transition">
             Free Download
           </Button>
         </div>
+
+        {/* Welcome Text */}
         <h1 className="text-white text-4xl sm:text-5xl font-extrabold z-10 relative mt-8">
           Welcome!
         </h1>

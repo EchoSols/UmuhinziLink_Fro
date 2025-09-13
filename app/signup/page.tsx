@@ -25,6 +25,7 @@ export default function SignUp() {
     phoneNumber: "",
     password: "",
     agreeToTerms: false,
+    accountType: "farmer", // default
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -55,24 +56,24 @@ export default function SignUp() {
     }
   };
 
+  const accountTypes = ["farmer", "supplier", "buyer"];
+
   return (
     <div className="w-full min-h-screen bg-gray-50 flex flex-col items-center">
       {/* Hero Section */}
       <div className="relative w-full h-72 sm:h-96 flex flex-col justify-center items-center text-center">
-        {/* Background Image */}
         <Image
           src="/image.png"
           alt="background"
           fill
           className="object-cover w-full h-full"
         />
-
         {/* Navbar */}
-        <div className="absolute top-4 left-0 right-0 max-w-5xl mx-auto flex justify-between items-center px-6 sm:px-8 z-10">
+        <div className="absolute top-4 left-0 right-0 max-w-5xl mx-auto flex justify-between items-center px-6 sm:px-8 z-10 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30">
           <h1 className="text-white font-bold text-lg">UmuhinziLink</h1>
           <div className="flex gap-6">
             {data.map((link, index) => (
-              <div key={index} className="flex items-center gap-2 text-white">
+              <div key={index} className="flex items-center gap-2 text-white hover:text-green-400 transition">
                 {link.icon}
                 <Link href={link.url} className="text-xs font-medium">
                   {link.name}
@@ -80,13 +81,11 @@ export default function SignUp() {
               </div>
             ))}
           </div>
-          <Button className="bg-white text-green-600 rounded-2xl px-4 py-2">
+          <Button className="bg-white text-green-600 rounded-2xl px-4 py-2 hover:bg-green-50 transition">
             Free Download
           </Button>
         </div>
-
-        {/* Welcome Text */}
-        <h1 className="text-white text-4xl sm:text-5xl font-extrabold z-10 relative mt-8 pb-3">
+        <h1 className="text-white text-4xl sm:text-5xl font-extrabold z-10 relative mt-8">
           Welcome!
         </h1>
         <p className="text-white z-10 relative mt-2 text-sm sm:text-base px-4 sm:px-0">
@@ -165,6 +164,28 @@ export default function SignUp() {
             />
           </div>
 
+          {/* Account Type with Switches */}
+          <div>
+            <Label htmlFor="account" className="text-gray-700 font-medium text-sm">
+              Account Type
+            </Label>
+            <div className="flex gap-4 mt-2 mb-5">
+              {accountTypes.map((type) => (
+                <div key={type} className="flex items-center gap-2">
+                  <Switch
+                    id={type}
+                    checked={formData.accountType === type}
+                    onCheckedChange={() =>
+                      setFormData((prev) => ({ ...prev, accountType: type }))
+                    }
+                    className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-gray-200"
+                  />
+                  <span className="capitalize text-gray-700 text-sm">{type}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="relative">
             <Label htmlFor="password" className="text-gray-700 font-medium text-sm">
               Password
@@ -188,6 +209,7 @@ export default function SignUp() {
             </button>
           </div>
 
+          {/* Agree Terms */}
           <div className="flex items-center space-x-2">
             <Switch
               id="agreeToTerms"
@@ -206,9 +228,15 @@ export default function SignUp() {
             type="submit"
             className="w-full bg-green-600 hover:bg-green-700 text-white font-medium text-sm"
           >
-            Continue
+            Sign Up
           </Button>
-          <p className="text-gray-700 text-sm">Already have an account? <Link href="/signin" className="text-green-600 text-sm font-semibold">Sign in</Link></p>
+
+          <p className="text-gray-700 text-sm text-center">
+            Already have an account?{" "}
+            <Link href="/signin" className="text-green-600 font-semibold">
+              Sign in
+            </Link>
+          </p>
         </form>
       </div>
     </div>

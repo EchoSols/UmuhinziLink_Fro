@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { House, Key, User, User2 } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 const AuthNavbar = () => {
     const links = [
-        { name: "HOME PAGE", icon: <House size={18} /> },
-        { name: "PROFILE", icon: <User size={18} /> },
-        { name: "SIGN UP", icon: <User2 size={18} /> },
-        { name: "SIGN IN", icon: <Key size={18} /> },
+        { name: "HOME PAGE", icon: <House size={18} />, url: "/" },
+        { name: "PROFILE", icon: <User size={18} />, url: "/profile" },
+        { name: "SIGN UP", icon: <User2 size={18} />, url: "/signup" },
+        { name: "SIGN IN", icon: <Key size={18} />, url: "/signin" },
     ];
 
     return (
@@ -23,7 +24,7 @@ const AuthNavbar = () => {
                         className="flex items-center gap-2 text-gray-700 cursor-pointer hover:text-[#0F7033] transition-colors"
                     >
                         {link.icon}
-                        <span className="text-sm font-medium">{link.name}</span>
+                        <Link href={link.url} className="text-sm font-medium">{link.name}</Link>
                     </div>
                 ))}
             </div>

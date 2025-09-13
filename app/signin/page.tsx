@@ -104,7 +104,7 @@ export default function SignIn() {
                     onChange={handleInputChange}
                     disabled={loading}
                     required
-                    className="text-gray-700 text-sm font-medium outline-gray-200"
+                    className="text-gray-700 text-sm font-medium outline-gray-200 rounded-xl"
                   />
                 </div>
 
@@ -123,7 +123,7 @@ export default function SignIn() {
                       onChange={handleInputChange}
                       disabled={loading}
                       required
-                      className="text-gray-700 text-sm font-medium outline-gray-200 pr-10"
+                      className="text-gray-700 text-sm font-medium outline-gray-200 pr-10 rounded-xl"
                     />
                     <button
                       type="button"

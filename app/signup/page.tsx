@@ -99,13 +99,11 @@ export default function SignUp() {
         </p>
       </div>
 
-      {/* Form Container */}
       <div className="w-full max-w-md bg-white shadow-lg rounded-xl -mt-20 p-6 sm:p-8 z-20 relative">
         <h1 className="text-center text-gray-800 font-extrabold text-xl sm:text-2xl mb-4">
           Register with
         </h1>
 
-        {/* Social Links */}
         <div className="flex gap-4 justify-center mb-4">
           {socialLinks.map((linkItem, idx) => (
             <Link
@@ -170,7 +168,6 @@ export default function SignUp() {
             />
           </div>
 
-          {/* Account Type with Switches */}
           <div>
             <Label htmlFor="account" className="text-gray-700 font-medium text-sm">
               Account Type

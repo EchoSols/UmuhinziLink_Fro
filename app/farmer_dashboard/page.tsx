@@ -1,8 +1,8 @@
 "use client";
 
-import { 
-  LayoutGrid, FilePlus, BarChart2, MessageSquare, 
-  ShoppingCart, User, Phone, Settings, LogOut, CloudSun, Mail, Leaf, Package, CheckCircle 
+import {
+  LayoutGrid, FilePlus, BarChart2, MessageSquare,
+  ShoppingCart, User, Phone, Settings, LogOut, CloudSun, Mail, Leaf, Package, CheckCircle
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import Link from 'next/link';
@@ -43,30 +43,29 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F8FAFC]">
-      {/* Header */}
       <header className="sticky top-0 z-30 bg-white border-b h-16 flex items-center px-8 shadow-sm">
         <Logo />
       </header>
       <div className="flex flex-1 min-h-0">
 
         {/* Sidebar */}
-        <aside className="w-64 bg-white border-r flex flex-col fixed left-0 top-16 h-[calc(100vh-4rem)] overflow-y-auto">
+        <aside className="w-64 bg-[#00A63E] border-r flex flex-col fixed left-0 top-16 h-[calc(100vh-4rem)] overflow-y-auto">
           <nav className="flex-1 px-4 py-6 space-y-2">
             {menuItems.map((item, index) => {
               const isActive = item.label === 'Dashboard';
               const Icon = item.icon;
-              const showDivider = index === 4 || index === 8; 
+              const showDivider = index === 4 || index === 8;
               return (
                 <div key={item.label}>
                   <Link href={item.href} className="block">
                     <div
                       className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium
                         ${isActive
-                          ? "bg-green-600 text-white shadow-sm"
-                          : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                          ? "bg-white text-green-600 shadow-sm rounded-lg"
+                          : "text-white"
                         }`}
                     >
-                      <Icon className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-500"}`} />
+                      <Icon className={`w-5 h-5 ${isActive ? "text-green-600" : "text-white"}`} />
                       <span>{item.label}</span>
                     </div>
                   </Link>
@@ -79,7 +78,7 @@ export default function Dashboard() {
 
         {/* Main Content */}
         <main className="flex-1 p-6 overflow-auto ml-64">
-          
+
           {/* Welcome Banner */}
           <div className="bg-green-500 text-white mb-8 rounded-xl p-6 shadow-sm">
             <h1 className="text-xl font-semibold mb-1">Welcome back, Farmer Chance!</h1>
@@ -170,43 +169,43 @@ export default function Dashboard() {
               <ResponsiveContainer>
                 <LineChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis 
-                    dataKey="name" 
-                    tick={{ fontSize: 12, fill: '#6b7280' }} 
-                    axisLine={false} 
-                    tickLine={false} 
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fontSize: 12, fill: '#6b7280' }}
+                    axisLine={false}
+                    tickLine={false}
                   />
-                  <YAxis 
-                    domain={[0, 100]} 
-                    tick={{ fontSize: 12, fill: '#6b7280' }} 
-                    axisLine={false} 
-                    tickLine={false} 
+                  <YAxis
+                    domain={[0, 100]}
+                    tick={{ fontSize: 12, fill: '#6b7280' }}
+                    axisLine={false}
+                    tickLine={false}
                     tickFormatter={(value) => `${value}%`}
                   />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: '#10b981', 
-                      border: 'none', 
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#10b981',
+                      border: 'none',
                       borderRadius: '6px',
                       color: '#fff',
                       padding: '6px 10px'
-                    }} 
+                    }}
                     formatter={(value) => [value.toLocaleString(), '']}
                   />
                   <defs>
                     <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#10b981" stopOpacity={0.3}/>
-                      <stop offset="100%" stopColor="#10b981" stopOpacity={0}/>
+                      <stop offset="0%" stopColor="#10b981" stopOpacity={0.3} />
+                      <stop offset="100%" stopColor="#10b981" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <Line 
-                    type="monotone" 
-                    dataKey="value" 
-                    stroke="#10b981" 
-                    strokeWidth={2} 
-                    dot={{ r: 4, fill: '#10b981' }} 
+                  <Line
+                    type="monotone"
+                    dataKey="value"
+                    stroke="#10b981"
+                    strokeWidth={2}
+                    dot={{ r: 4, fill: '#10b981' }}
                     activeDot={{ r: 5, fill: '#10b981' }}
-                    fill="url(#colorValue)" 
+                    fill="url(#colorValue)"
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -238,11 +237,10 @@ export default function Dashboard() {
                       <td className="px-6 py-4 text-sm text-gray-900">{o.buyer}</td>
                       <td className="px-6 py-4 text-sm text-gray-900">{o.amount}</td>
                       <td className="px-6 py-4">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          o.status === 'Delivered' ? 'bg-green-100 text-green-800' : 
-                          o.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 
-                          'bg-blue-100 text-blue-800'
-                        }`}>
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${o.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+                          o.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-blue-100 text-blue-800'
+                          }`}>
                           {o.status}
                         </span>
                       </td>

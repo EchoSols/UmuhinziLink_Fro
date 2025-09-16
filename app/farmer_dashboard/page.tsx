@@ -2,10 +2,12 @@
 
 import {
   LayoutGrid, FilePlus, BarChart2, MessageSquare,
-  ShoppingCart, User, Phone, Settings, LogOut, CloudSun, Mail, Leaf, Package, CheckCircle
+  ShoppingCart, User, Phone, Settings, LogOut, CloudSun, Mail, Leaf, Package, CheckCircle,
+  Search
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import Link from 'next/link';
+import { Input } from '@/components/ui/input';
 
 //menu items
 const menuItems = [
@@ -30,7 +32,7 @@ const chartData = Array.from({ length: 12 }).map((_, i) => ({
 
 export default function Dashboard() {
   const Logo = () => (
-    <span className="font-extrabold text-2xl tracking-tight">
+    <span className="font-extrabold text-2xl tracking-tight px-6">
       <span className="text-white">Umuhinzi</span><span className="text-white">Link</span>
     </span>
   );
@@ -76,8 +78,11 @@ export default function Dashboard() {
         {/* Main Content */}
         <main className="flex-1 overflow-auto ml-64 relative">
           <header className="fixed top-0 w-full z-30 bg-white border-b h-16 flex items-center px-8 shadow-sm">
-            <div className='p-4'>
-              <Logo />
+            <div className='flex'>
+              <div>
+                <Input type='text' className='rounded-lg border border-gray-100 w-94 relative' placeholder='Search here ...' />
+                <Search size={24} className='absolute' />
+              </div>
             </div>
           </header>
           {/* Welcome Banner */}

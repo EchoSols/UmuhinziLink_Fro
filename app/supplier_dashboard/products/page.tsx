@@ -11,20 +11,22 @@ import {
   Settings,
   LogOut,
   Mail,
-  Pencil,
-  Trash2,
-  Plus,
-  Search,
-  ChevronDown,
+  Heart,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
 const Logo = () => (
-  <span className="font-extrabold text-2xl tracking-tight">
-    <span className="text-green-700">Umuhinzi</span>
-    <span className="text-black">Link</span>
-  </span>
+  <div className="flex items-center gap-2">
+    <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+      <span className="text-white font-bold text-sm">F</span>
+    </div>
+    <span className="font-extrabold text-xl tracking-tight">
+      <span className="text-green-700">Farm</span><span className="text-black">Link</span>
+    </span>
+  </div>
 );
 
 const menuItems = [
@@ -36,20 +38,27 @@ const menuItems = [
   { label: "Profile", href: "/supplier_dashboard/profile", icon: User },
   { label: "Contact", href: "/supplier_dashboard/contact", icon: Phone },
   { label: "Settings", href: "/supplier_dashboard/settings", icon: Settings },
-  { label: "Logout", href: "/logout", icon: LogOut },
+  { label: "Logout", href: "/signin", icon: LogOut },
 ];
 
 export default function ProductsPage() {
   const [showForm, setShowForm] = useState(false);
   const [inputs, setInputs] = useState([
-    { id: 1, name: "Premium Corn Seeds", category: "Seeds", price: 45.0, stock: 150, status: "In Stock", image: "/corn-seeds.png" },
-    { id: 6, name: "Wheat Seeds", category: "Seeds", price: 38.2, stock: 12, status: "Low Stock", image: "/wheat-seeds.png" },
+    { id: 1, name: "NPK Fertilizer", category: "Fertilizer", price: 25.00, originalPrice: 30.00, stock: 150, status: "In Stock", image: "/npk-fertilizer.png" },
+    { id: 2, name: "NPK Fertilizer", category: "Fertilizer", price: 25.00, originalPrice: 30.00, stock: 120, status: "In Stock", image: "/npk-fertilizer.png" },
+    { id: 3, name: "NPK Fertilizer", category: "Fertilizer", price: 25.00, originalPrice: 30.00, stock: 95, status: "In Stock", image: "/npk-fertilizer.png" },
+    { id: 4, name: "NPK Fertilizer", category: "Fertilizer", price: 25.00, originalPrice: 30.00, stock: 80, status: "In Stock", image: "/npk-fertilizer.png" },
+    { id: 5, name: "NPK Fertilizer", category: "Fertilizer", price: 25.00, originalPrice: 30.00, stock: 75, status: "In Stock", image: "/npk-fertilizer.png" },
+    { id: 6, name: "NPK Fertilizer", category: "Fertilizer", price: 25.00, originalPrice: 30.00, stock: 60, status: "In Stock", image: "/npk-fertilizer.png" },
+    { id: 7, name: "NPK Fertilizer", category: "Fertilizer", price: 25.00, originalPrice: 30.00, stock: 45, status: "In Stock", image: "/npk-fertilizer.png" },
+    { id: 8, name: "NPK Fertilizer", category: "Fertilizer", price: 25.00, originalPrice: 30.00, stock: 30, status: "In Stock", image: "/npk-fertilizer.png" },
   ]);
 
   const [formData, setFormData] = useState({
     name: "",
     category: "",
     price: "",
+    originalPrice: "",
     stock: "",
     status: "In Stock",
     image: null as File | null,
@@ -63,12 +72,13 @@ export default function ProductsPage() {
       name: formData.name,
       category: formData.category,
       price: parseFloat(formData.price),
+      originalPrice: parseFloat(formData.originalPrice),
       stock: parseInt(formData.stock),
       status: formData.status,
       image: formData.imagePreview || "/placeholder.png",
     };
     setInputs([newItem, ...inputs]);
-    setFormData({ name: "", category: "", price: "", stock: "", status: "In Stock", image: null, imagePreview: "" });
+    setFormData({ name: "", category: "", price: "", originalPrice: "", stock: "", status: "In Stock", image: null, imagePreview: "" });
     setShowForm(false);
   };
 
@@ -77,38 +87,53 @@ export default function ProductsPage() {
       {/* Header */}
       <header className="sticky top-0 z-30 bg-white border-b h-16 flex items-center justify-between px-8 shadow-sm">
         <Logo />
-        <button
-          onClick={() => setShowForm(true)}
-          className="bg-green-600 text-white font-medium py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-green-700 transition-colors cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          Add New Input
-        </button>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 text-sm">
+            <div className="w-5 h-4 bg-blue-600 rounded-sm flex items-center justify-center">
+              <div className="w-3 h-2 bg-yellow-400 rounded-sm"></div>
+            </div>
+            <span>English</span>
+          </div>
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-green-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-700 transition-colors cursor-pointer"
+          >
+            + Add New Product
+          </button>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+              <User className="w-4 h-4 text-gray-600" />
+            </div>
+            <div className="text-sm">
+              <p className="font-medium text-gray-900">Agri Sup</p>
+            </div>
+          </div>
+        </div>
       </header>
 
       <div className="flex flex-1 min-h-0">
         {/* Sidebar */}
-        <aside className="w-64 bg-white border-r flex flex-col">
-          <nav className="flex-1 px-4 py-6 space-y-2">
+        <aside className="w-64 bg-green-600 flex flex-col fixed left-0 top-16 h-[calc(100vh-4rem)] overflow-y-auto">
+          <nav className="flex-1 px-4 py-6 space-y-1">
             {menuItems.map((item, index) => {
               const isActive = item.label === "My Inputs";
               const Icon = item.icon;
-              const showDivider = index === 3 || index === 8;
+              const showDivider = index === 3 || index === 7;
               return (
                 <div key={item.label}>
                   <Link href={item.href} className="block">
                     <div
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium ${
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all text-sm font-medium ${
                         isActive
-                          ? "bg-green-600 text-white shadow-sm"
-                          : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                          ? "bg-white text-green-600 shadow-sm"
+                          : "text-white hover:bg-green-700"
                       }`}
                     >
-                      <Icon className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-500"}`} />
+                      <Icon className={`w-4 h-4 ${isActive ? "text-green-600" : "text-white"}`} />
                       <span>{item.label}</span>
                     </div>
                   </Link>
-                  {showDivider && <div className="border-t border-gray-200 my-2 mx-4"></div>}
+                  {showDivider && <div className="border-t border-green-500 my-2 mx-3"></div>}
                 </div>
               );
             })}
@@ -116,25 +141,34 @@ export default function ProductsPage() {
         </aside>
 
         {/* Main */}
-        <main className="flex-1 p-6 bg-gray-50 overflow-auto">
-          {/* Search */}
-          <div className="flex justify-between items-center mb-6 gap-4">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Search your product..."
-                className="w-full bg-white border text-gray-600 border-gray-300 rounded-lg py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              />
+        <main className="flex-1 p-6 bg-gray-50 overflow-auto ml-64">
+          {/* Promotional Banner */}
+          <div className="bg-gradient-to-r from-green-500 to-teal-500 text-white p-6 rounded-lg mb-6 relative overflow-hidden">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-sm opacity-90 mb-1">Tuesday, 16 may 2023</p>
+                <h1 className="text-2xl font-bold mb-2">Enjoy new farm inputs</h1>
+                <h2 className="text-xl font-semibold mb-1">in this season</h2>
+                <p className="text-sm opacity-90">NPK Fertilizer - 25kg (1)</p>
+              </div>
+              <div className="relative">
+                <Image 
+                  src="/npk-fertilizer.png" 
+                  alt="NPK Fertilizer" 
+                  width={120} 
+                  height={120} 
+                  className="object-contain"
+                />
+              </div>
             </div>
-            <div className="flex gap-3">
-              <button className="bg-white border border-gray-300 text-gray-700 rounded-lg py-2.5 px-4 text-sm flex items-center gap-2 hover:bg-gray-50 transition-colors cursor-pointer">
-                All Categories
-                <ChevronDown className="w-4 h-4" />
+            <div className="absolute top-4 right-20">
+              <button className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-colors">
+                <ChevronLeft className="w-4 h-4 text-white" />
               </button>
-              <button className="bg-white border border-gray-300 text-gray-700 rounded-lg py-2.5 px-4 text-sm flex items-center gap-2 hover:bg-gray-50 transition-colors cursor-pointer">
-                All Stock Levels
-                <ChevronDown className="w-4 h-4" />
+            </div>
+            <div className="absolute top-4 right-10">
+              <button className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-colors">
+                <ChevronRight className="w-4 h-4 text-white" />
               </button>
             </div>
           </div>
@@ -150,45 +184,28 @@ export default function ProductsPage() {
                   <div className="w-full h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
                     <Image src={item.image} alt={item.name} width={300} height={200} className="object-cover w-full h-full" />
                   </div>
-                  <div
-                    className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-medium ${
-                      item.status === "In Stock"
-                        ? "bg-green-100 text-green-700"
-                        : item.status === "Low Stock"
-                        ? "bg-orange-100 text-orange-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {item.status}
+                  <div className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-gray-50 transition-colors cursor-pointer">
+                    <Heart className="w-4 h-4 text-gray-400 hover:text-red-500 transition-colors" />
+                  </div>
+                  <div className="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded text-xs font-medium">
+                    Available
                   </div>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 mb-1">{item.name}</h3>
-                  <p className="text-sm text-gray-500 mb-3">{item.category}</p>
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-lg font-bold text-gray-900">${item.price.toFixed(2)}</p>
-                    <p className="text-sm text-gray-600">
-                      Stock:{" "}
-                      <span
-                        className={`font-medium ${
-                          item.stock === 0
-                            ? "text-red-600"
-                            : item.stock < 15
-                            ? "text-orange-600"
-                            : "text-gray-900"
-                        }`}
-                      >
-                        {item.stock}
-                      </span>
-                    </p>
+                  <h3 className="font-semibold text-gray-900 mb-2">{item.name}</h3>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-lg font-bold text-gray-900">${item.price.toFixed(2)}</span>
+                    {item.originalPrice && (
+                      <span className="text-sm text-gray-500 line-through">${item.originalPrice.toFixed(2)}</span>
+                    )}
                   </div>
-                  <div className="flex gap-2 mt-4">
-                    <button className="flex-1 bg-gray-100 text-gray-700 px-3 py-2 rounded-md text-sm flex items-center justify-center gap-1 hover:bg-gray-200 transition-colors cursor-pointer">
-                      <Pencil className="w-4 h-4" />
-                      Edit
-                    </button>
-                    <button className="bg-red-100 text-red-700 p-2 rounded-md hover:bg-red-200 transition-colors cursor-pointer">
-                      <Trash2 className="w-4 h-4" />
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                      <span className="text-xs text-gray-500">Stock: {item.stock}</span>
+                    </div>
+                    <button className="w-6 h-6 bg-red-500 text-white rounded flex items-center justify-center text-xs font-bold hover:bg-red-600 transition-colors cursor-pointer">
+                      ♥
                     </button>
                   </div>
                 </div>
@@ -231,6 +248,15 @@ export default function ProductsPage() {
               />
               <input
                 type="number"
+                placeholder="Original Price"
+                step="0.01"
+                value={formData.originalPrice}
+                onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
+                required
+                className="border rounded-lg px-3 py-2"
+              />
+              <input
+                type="number"
                 placeholder="Stock"
                 value={formData.stock}
                 onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
@@ -262,13 +288,14 @@ export default function ProductsPage() {
                 className="border rounded-lg px-3 py-2"
               />
               {formData.imagePreview && (
-                <Image
-                  src={formData.imagePreview}
-                  alt="Preview"
-                  width={200}
-                  height={150}
-                  className="rounded-md border"
-                />
+                <div className="relative w-48 h-36">
+                  <Image
+                    src={formData.imagePreview}
+                    alt="Preview"
+                    fill
+                    className="rounded-md border object-cover"
+                  />
+                </div>
               )}
               <div className="flex justify-end gap-2 mt-4">
                 <button

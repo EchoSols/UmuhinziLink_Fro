@@ -4,11 +4,17 @@ import {
   User, Phone, Settings, LogOut, Mail, TrendingDown, Users, Package, TrendingUp,  
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Logo = () => (
-  <span className="font-extrabold text-2xl tracking-tight">
-    <span className="text-green-700">Umuhinzi</span><span className="text-black">Link</span>
-  </span>
+  <div className="flex items-center gap-2">
+    <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+      <span className="text-white font-bold text-sm">F</span>
+    </div>
+    <span className="font-extrabold text-xl tracking-tight">
+      <span className="text-green-700">Farm</span><span className="text-black">Link</span>
+    </span>
+  </div>
 );
 
 const menuItems = [
@@ -28,33 +34,49 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-white border-b h-16 flex items-center px-8 shadow-sm">
+      <header className="sticky top-0 z-30 bg-white border-b h-16 flex items-center justify-between px-8 shadow-sm">
         <Logo />
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 text-sm">
+            <div className="w-5 h-4 bg-blue-600 rounded-sm flex items-center justify-center">
+              <div className="w-3 h-2 bg-yellow-400 rounded-sm"></div>
+            </div>
+            <span>English</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+              <User className="w-4 h-4 text-gray-600" />
+            </div>
+            <div className="text-sm">
+              <p className="font-medium text-gray-900">Agri Sup</p>
+            </div>
+          </div>
+        </div>
       </header>
       
       <div className="flex flex-1 min-h-0">
         {/* Sidebar */}
-        <aside className="w-64 bg-white border-r flex flex-col fixed left-0 top-16 h-[calc(100vh-4rem)] overflow-y-auto">
-          <nav className="flex-1 px-4 py-6 space-y-2">
+        <aside className="w-64 bg-green-600 flex flex-col fixed left-0 top-16 h-[calc(100vh-4rem)] overflow-y-auto">
+          <nav className="flex-1 px-4 py-6 space-y-1">
             {menuItems.map((item, index) => {
               const isActive = item.label === 'Dashboard';
               const Icon = item.icon;
-              const showDivider = index === 3 || index === 8; 
+              const showDivider = index === 3 || index === 7; 
               return (
                 <div key={item.label}>
                   <Link href={item.href} className="block">
                     <div
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all text-sm font-medium
                         ${isActive
-                          ? "bg-green-600 text-white shadow-sm"
-                          : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                          ? "bg-white text-green-600 shadow-sm"
+                          : "text-white hover:bg-green-700"
                         }`}
                     >
-                      <Icon className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-500"}`} />
+                      <Icon className={`w-4 h-4 ${isActive ? "text-green-600" : "text-white"}`} />
                       <span>{item.label}</span>
                     </div>
                   </Link>
-                  {showDivider && <div className="border-t border-gray-200 my-2 mx-4"></div>}
+                  {showDivider && <div className="border-t border-green-500 my-2 mx-3"></div>}
                 </div>
               );
             })}
@@ -70,129 +92,199 @@ export default function Dashboard() {
           </div>
 
           {/* Stats cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <TrendingDown className="w-6 h-6 text-blue-600" />
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+            <div className="bg-green-600 text-white p-6 rounded-lg shadow-sm">
+              <div className="flex items-center justify-between mb-2">
+                <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-white" />
                 </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Listed Inputs</p>
-                  <h2 className="text-2xl font-bold text-gray-900">42</h2>
-                  <p className="text-green-600 text-sm font-medium">+5 this week</p>
-                </div>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-1">42</h2>
+                <p className="text-green-100 text-sm">Listed Inputs</p>
+                <p className="text-green-100 text-xs">+5% from last week</p>
               </div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <Users className="w-6 h-6 text-orange-600" />
+              <div className="flex items-center justify-between mb-2">
+                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                  <Users className="w-5 h-5 text-orange-600" />
                 </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Farmer Requests</p>
-                  <h2 className="text-2xl font-bold text-gray-900">18</h2>
-                  <p className="text-orange-600 text-sm font-medium">8 pending</p>
-                </div>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">334</h2>
+                <p className="text-gray-600 text-sm">Farmer Requests</p>
+                <p className="text-orange-600 text-xs">8 pending</p>
               </div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Package className="w-6 h-6 text-purple-600" />
+              <div className="flex items-center justify-between mb-2">
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-green-600" />
                 </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Active Orders</p>
-                  <h2 className="text-2xl font-bold text-gray-900">12</h2>
-                  <p className="text-blue-600 text-sm font-medium">4 shipping</p>
-                </div>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">3845</h2>
+                <p className="text-gray-600 text-sm">Active Orders</p>
+                <p className="text-blue-600 text-xs">4 shipping</p>
               </div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-green-600" />
+              <div className="flex items-center justify-between mb-2">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Users className="w-5 h-5 text-blue-600" />
                 </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Total Earnings</p>
-                  <h2 className="text-2xl font-bold text-gray-900">$25.4</h2>
-                  <p className="text-green-600 text-sm font-medium">+12% this month</p>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">20</h2>
+                <p className="text-gray-600 text-sm">New Customers</p>
+                <p className="text-blue-600 text-xs">+15% from yesterday</p>
+              </div>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm border">
+              <div className="flex items-center justify-between mb-2">
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-green-600" />
                 </div>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">23,000$</h2>
+                <p className="text-gray-600 text-sm">Total Earnings</p>
+                <p className="text-green-600 text-xs">+12% this month</p>
               </div>
             </div>
           </div>
 
-          {/* New Farmer Requests */}
+          {/* Charts and Analytics Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            {/* Market Trends Chart */}
+            <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm border">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-bold text-gray-900">Market Trends Prices</h2>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <span>in 2024</span>
+                  <button className="text-green-600 text-sm font-medium hover:text-green-700 cursor-pointer">View All</button>
+                </div>
+              </div>
+              <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center relative">
+                {/* Simulated Chart Area */}
+                <div className="w-full h-full relative">
+                  <div className="absolute bottom-4 left-4 text-lg font-bold text-gray-900">220,342,123</div>
+                  <svg className="w-full h-full" viewBox="0 0 400 200">
+                    <path d="M20 180 Q60 160 100 140 T180 120 T260 100 T340 80 T380 60" 
+                          stroke="#10b981" strokeWidth="3" fill="none" />
+                    <path d="M20 180 Q60 160 100 140 T180 120 T260 100 T340 80 T380 60 L380 180 L20 180 Z" 
+                          fill="url(#gradient)" opacity="0.3" />
+                    <defs>
+                      <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#10b981" stopOpacity="0.8"/>
+                        <stop offset="100%" stopColor="#10b981" stopOpacity="0.1"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            
+            {/* Side Charts */}
+            <div className="space-y-6">
+              {/* Listed Inputs vs Sales Level */}
+              <div className="bg-white p-4 rounded-lg shadow-sm border">
+                <h3 className="text-sm font-medium text-gray-900 mb-3">Listed Inputs vs Sales Level</h3>
+                <div className="h-32 bg-gray-50 rounded flex items-end justify-center gap-1 p-2">
+                  {[40, 60, 80, 45, 70, 55, 90, 35].map((height, i) => (
+                    <div key={i} className={`w-4 bg-blue-500 rounded-t`} style={{height: `${height}%`}}></div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Customer Satisfaction */}
+              <div className="bg-white p-4 rounded-lg shadow-sm border">
+                <h3 className="text-sm font-medium text-gray-900 mb-3">Customer Satisfaction</h3>
+                <div className="h-32 bg-gray-50 rounded flex items-center justify-center relative">
+                  <svg className="w-full h-full" viewBox="0 0 120 80">
+                    <path d="M10 60 Q30 40 50 45 T90 35 T110 30" 
+                          stroke="#10b981" strokeWidth="2" fill="none" />
+                    <path d="M10 65 Q30 50 50 55 T90 45 T110 40" 
+                          stroke="#3b82f6" strokeWidth="2" fill="none" />
+                  </svg>
+                  <div className="absolute bottom-2 left-2 flex gap-3 text-xs">
+                    <div className="flex items-center gap-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span>Last Month</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span>This Month</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Top Products Table */}
           <div className="bg-white p-6 rounded-lg shadow-sm border mb-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold text-gray-900">New Farmer Requests</h2>
-              <button className="text-green-600 text-sm font-medium hover:text-green-700 cursor-pointer">View All</button>
+              <h2 className="text-lg font-bold text-gray-900">Top Products</h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Farmer</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Item Requested</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Quantity</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Type</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Actions</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">#</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Name</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Popularity</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Sales</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border-b border-gray-100">
+                    <td className="py-4 px-4 text-gray-900 font-medium">01</td>
+                    <td className="py-4 px-4 text-gray-900">Home Decor Range</td>
                     <td className="py-4 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                          MU
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">Marie Uwimana</p>
-                          <p className="text-xs text-gray-500">Kigali, Rwanda</p>
-                        </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="bg-green-500 h-2 rounded-full" style={{width: '85%'}}></div>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-gray-900">NPK Fertilizer 25kg</td>
-                    <td className="py-4 px-4 text-gray-900">5 bags</td>
                     <td className="py-4 px-4">
-                      <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">Credit</span>
+                      <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium">45%</span>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-gray-100">
+                    <td className="py-4 px-4 text-gray-900 font-medium">02</td>
+                    <td className="py-4 px-4 text-gray-900">Disney Princess Pink Bag 18"</td>
+                    <td className="py-4 px-4">
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="bg-green-500 h-2 rounded-full" style={{width: '70%'}}></div>
+                      </div>
                     </td>
                     <td className="py-4 px-4">
-                      <div className="flex gap-2">
-                        <button className="bg-green-100 text-green-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-green-200 cursor-pointer">
-                          Approve
-                        </button>
-                        <button className="bg-red-100 text-red-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-red-200 cursor-pointer">
-                          Decline
-                        </button>
+                      <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium">29%</span>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-gray-100">
+                    <td className="py-4 px-4 text-gray-900 font-medium">03</td>
+                    <td className="py-4 px-4 text-gray-900">Bathroom Essentials</td>
+                    <td className="py-4 px-4">
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="bg-green-500 h-2 rounded-full" style={{width: '60%'}}></div>
                       </div>
+                    </td>
+                    <td className="py-4 px-4">
+                      <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium">18%</span>
                     </td>
                   </tr>
                   <tr>
+                    <td className="py-4 px-4 text-gray-900 font-medium">04</td>
+                    <td className="py-4 px-4 text-gray-900">Apple Smartwatch</td>
                     <td className="py-4 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                          JB
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">Jean Baptiste</p>
-                          <p className="text-xs text-gray-500">Musanze, Rwanda</p>
-                        </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="bg-green-500 h-2 rounded-full" style={{width: '45%'}}></div>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-gray-900">Maize Seeds 10kg</td>
-                    <td className="py-4 px-4 text-gray-900">3 bags</td>
                     <td className="py-4 px-4">
-                      <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">Purchase</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <div className="flex gap-2">
-                        <button className="bg-green-100 text-green-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-green-200">
-                          Approve
-                        </button>
-                        <button className="bg-red-100 text-red-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-red-200">
-                          Decline
-                        </button>
-                      </div>
+                      <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium">25%</span>
                     </td>
                   </tr>
                 </tbody>
@@ -200,103 +292,35 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Inventory and Orders  */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Inventory Status */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-bold text-gray-900">Inventory Status</h2>
-                <button className="text-green-600 text-sm font-medium hover:text-green-700 cursor-pointer">+ Add Product</button>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between py-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                      <div className="w-4 h-4 bg-green-600 rounded"></div>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">NPK Fertilizer</p>
-                      <p className="text-xs text-gray-500">25kg bags</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium text-gray-900">45 units</p>
-                    <p className="text-xs text-green-600 font-medium">In Stock</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between py-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
-                      <div className="w-4 h-4 bg-yellow-600 rounded"></div>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">Pesticide Spray</p>
-                      <p className="text-xs text-gray-500">1L bottles</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium text-gray-900">8 units</p>
-                    <p className="text-xs text-red-600 font-medium">Low Stock</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between py-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <div className="w-4 h-4 bg-blue-600 rounded"></div>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">Hand Hoe</p>
-                      <p className="text-xs text-gray-500">Steel tools</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium text-gray-900">23 units</p>
-                    <p className="text-xs text-green-600 font-medium">In Stock</p>
-                  </div>
-                </div>
-              </div>
+          {/* Orders Overview */}
+          <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-bold text-gray-900">Orders Overview</h2>
             </div>
-
-            {/* Recent Orders */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-bold text-gray-900">Recent Orders</h2>
-                <button className="text-green-600 text-sm font-medium hover:text-green-700 cursor-pointer">View All Orders</button>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center py-2 text-sm">
+                <span className="text-gray-600">#ORD001 - Amara Uwera (5kg)</span>
+                <span className="text-gray-900 font-medium">4 hours ago</span>
               </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                  <div>
-                    <p className="font-medium text-gray-900">#ORD-001</p>
-                    <p className="text-xs text-gray-500">NPK Fertilizer - 3 bags</p>
-                    <p className="text-xs text-gray-500">by Emmanuel Nkusi</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-medium">Processing</span>
-                    <p className="text-sm font-bold text-gray-900 mt-1">₱45,000</p>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                  <div>
-                    <p className="font-medium text-gray-900">#ORD-002</p>
-                    <p className="text-xs text-gray-500">Maize Seeds - 2 bags</p>
-                    <p className="text-xs text-gray-500">by Alice Mukamana</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">Shipped</span>
-                    <p className="text-sm font-bold text-gray-900 mt-1">₱28,000</p>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center py-3">
-                  <div>
-                    <p className="font-medium text-gray-900">#ORD-003</p>
-                    <p className="text-xs text-gray-500">Hand Hoe - 1 unit</p>
-                    <p className="text-xs text-gray-500">by Patrick Habimana</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">Completed</span>
-                    <p className="text-sm font-bold text-gray-900 mt-1">₱12,500</p>
-                  </div>
-                </div>
+              <div className="flex justify-between items-center py-2 text-sm">
+                <span className="text-gray-600">#ORD001 - Amara Uwera (5kg)</span>
+                <span className="text-gray-900 font-medium">4 hours ago</span>
+              </div>
+              <div className="flex justify-between items-center py-2 text-sm">
+                <span className="text-gray-600">#ORD001 - Amara Uwera (5kg)</span>
+                <span className="text-gray-900 font-medium">4 hours ago</span>
+              </div>
+              <div className="flex justify-between items-center py-2 text-sm">
+                <span className="text-gray-600">#ORD001 - Amara Uwera (5kg)</span>
+                <span className="text-gray-900 font-medium">4 hours ago</span>
+              </div>
+              <div className="flex justify-between items-center py-2 text-sm">
+                <span className="text-gray-600">#ORD001 - Amara Uwera (5kg)</span>
+                <span className="text-gray-900 font-medium">4 hours ago</span>
+              </div>
+              <div className="flex justify-between items-center py-2 text-sm">
+                <span className="text-gray-600">#ORD001 - Amara Uwera (5kg)</span>
+                <span className="text-gray-900 font-medium">4 hours ago</span>
               </div>
             </div>
           </div>

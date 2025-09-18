@@ -2,15 +2,20 @@
 import React from 'react';
 import { 
   CheckCircle, LayoutGrid, FilePlus, MessageSquare, BarChart2, ShoppingCart, 
-  User, Phone, Settings, LogOut, Mail, Search, ChevronDown, Download, 
-  FileText, CheckCircle2, Clock, XCircle 
+  User, Phone, Settings, LogOut, Mail, Search, ChevronDown, Filter 
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Logo = () => (
-  <span className="font-extrabold text-2xl tracking-tight">
-    <span className="text-green-700">Umuhinzi</span><span className="text-black">Link</span>
-  </span>
+  <div className="flex items-center gap-2">
+    <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+      <span className="text-white font-bold text-sm">F</span>
+    </div>
+    <span className="font-extrabold text-xl tracking-tight">
+      <span className="text-green-700">Farm</span><span className="text-black">Link</span>
+    </span>
+  </div>
 );
 
 const menuItems = [
@@ -30,33 +35,52 @@ export default function FarmerRequests() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-white border-b h-16 flex items-center px-8 shadow-sm">
+      <header className="sticky top-0 z-30 bg-white border-b h-16 flex items-center justify-between px-8 shadow-sm">
         <Logo />
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 text-sm">
+            <div className="w-5 h-4 bg-blue-600 rounded-sm flex items-center justify-center">
+              <div className="w-3 h-2 bg-yellow-400 rounded-sm"></div>
+            </div>
+            <span>English</span>
+          </div>
+          <button className="bg-green-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-700 transition-colors cursor-pointer">
+            + Add New Product
+          </button>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+              <User className="w-4 h-4 text-gray-600" />
+            </div>
+            <div className="text-sm">
+              <p className="font-medium text-gray-900">Agri Sup</p>
+            </div>
+          </div>
+        </div>
       </header>
       
       <div className="flex flex-1 min-h-0">
         {/* Sidebar */}
-        <aside className="w-64 bg-white border-r flex flex-col fixed left-0 top-16 h-[calc(100vh-4rem)] overflow-y-auto">
-          <nav className="flex-1 px-4 py-6 space-y-2">
+        <aside className="w-64 bg-green-600 flex flex-col fixed left-0 top-16 h-[calc(100vh-4rem)] overflow-y-auto">
+          <nav className="flex-1 px-4 py-6 space-y-1">
             {menuItems.map((item, index) => {
               const isActive = item.label === 'Farmer Request';
               const Icon = item.icon;
-              const showDivider = index === 3 || index === 8; 
+              const showDivider = index === 3 || index === 7; 
               return (
                 <div key={item.label}>
                   <Link href={item.href} className="block">
                     <div
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all text-sm font-medium
                         ${isActive
-                          ? "bg-green-600 text-white shadow-sm"
-                          : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                          ? "bg-white text-green-600 shadow-sm"
+                          : "text-white hover:bg-green-700"
                         }`}
                     >
-                      <Icon className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-500"}`} />
+                      <Icon className={`w-4 h-4 ${isActive ? "text-green-600" : "text-white"}`} />
                       <span>{item.label}</span>
                     </div>
                   </Link>
-                  {showDivider && <div className="border-t border-gray-200 my-2 mx-4"></div>}
+                  {showDivider && <div className="border-t border-green-500 my-2 mx-3"></div>}
                 </div>
               );
             })}
@@ -66,89 +90,34 @@ export default function FarmerRequests() {
         {/* Main Content */}
         <main className="flex-1 p-6 overflow-auto ml-64">
           {/* Header */}
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">Farmer Requests</h1>
-              <p className="text-gray-600">Manage and respond to farmer purchase and credit requests</p>
-            </div>
-            <div className="flex gap-3">
-              <button className="bg-white border cursor-pointer border-gray-300 text-gray-700 rounded-lg py-2.5 px-4 text-sm flex items-center gap-2 hover:bg-gray-50 transition-colors">
-                All Requests
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              <button className="bg-green-600 text-white  cursor-pointer font-medium py-2.5 px-4 rounded-lg flex items-center gap-2 hover:bg-green-700 transition-colors">
-                <Download className="w-4 h-4" />
-                Export
-              </button>
-            </div>
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-xl font-semibold text-gray-900">Farmer Request</h1>
+            <button className="bg-green-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-700 transition-colors cursor-pointer">
+              + Add New Product
+            </button>
           </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <FileText className="w-6 h-6 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Total Requests</p>
-                  <h2 className="text-2xl font-bold text-gray-900">47</h2>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <CheckCircle2 className="w-6 h-6 text-green-600" />
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Approved</p>
-                  <h2 className="text-2xl font-bold text-gray-900">23</h2>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-yellow-600" />
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Pending</p>
-                  <h2 className="text-2xl font-bold text-gray-900">18</h2>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                  <XCircle className="w-6 h-6 text-red-600" />
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Declined</p>
-                  <h2 className="text-2xl font-bold text-gray-900">6</h2>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {/* Search and  Filters */}
-          <div className="flex justify-between items-center mb-6 gap-4">
-            <div className="relative flex-1 max-w-md">
+          {/* Search and Filters */}
+          <div className="flex justify-between items-center mb-4 gap-4">
+            <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
                 type="text"
-                placeholder="Search by farmer name or item..."
-                className="w-full bg-white border border-gray-300 text-gray-600 rounded-lg py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                placeholder="Search..."
+                className="w-full bg-white border border-gray-300 text-gray-600 rounded-md py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
               />
             </div>
-            <div className="flex gap-3">
-              <button className="bg-white border cursor-pointer border-gray-300 text-gray-700 rounded-lg py-2.5 px-4 text-sm flex items-center gap-2 hover:bg-gray-50 transition-colors">
-                All Types
-                <ChevronDown className="w-4 h-4" />
+            <div className="flex gap-2">
+              <button className="bg-white border border-gray-300 text-gray-700 rounded-md py-2 px-3 text-sm flex items-center gap-1 hover:bg-gray-50 transition-colors cursor-pointer">
+                Filter
+                <Filter className="w-3 h-3" />
               </button>
-              <button className="bg-white border border-gray-300 cursor-pointer text-gray-700 rounded-lg py-2.5 px-4 text-sm flex items-center gap-2 hover:bg-gray-50 transition-colors">
-                All Status
-                <ChevronDown className="w-4 h-4" />
+              <button className="bg-white border border-gray-300 text-gray-700 rounded-md py-2 px-3 text-sm hover:bg-gray-50 transition-colors cursor-pointer">
+                Export
+              </button>
+              <button className="bg-green-600 text-white rounded-md py-2 px-3 text-sm hover:bg-green-700 transition-colors cursor-pointer">
+                Filter
               </button>
             </div>
           </div>
@@ -159,127 +128,86 @@ export default function FarmerRequests() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-200 bg-gray-50">
-                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Farmer</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Item Requested</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Quantity</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Type</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Date</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Status</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">Actions</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">ID</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">FARMER</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">ADDRESS</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">DATE</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">INPUT</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">QUANTITY</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600 text-sm">ACTION</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                          MU
+                  {[
+                    { id: "R001", farmer: "Christine Uwera", address: "123 Kicukiro Street, Kigali 250", date: "04 Aug 2024", input: "NPK fertilizer", quantity: "120", status: "Approved" },
+                    { id: "R002", farmer: "Jean Ntawukuriryayo", address: "456 Remera Avenue, Gasabo 250", date: "03 Aug 2024", input: "Maize Seeds", quantity: "80", status: "Pending" },
+                    { id: "R003", farmer: "Marie Mukamana", address: "789 Nyamirambo Road, Nyarugenge 250", date: "02 Aug 2024", input: "NPK fertilizer", quantity: "150", status: "Approved" },
+                    { id: "R004", farmer: "Robert Nshimiye", address: "321 Kimisagara Street, Nyarugenge 250", date: "01 Aug 2024", input: "Maize Seeds", quantity: "100", status: "Pending" },
+                    { id: "R005", farmer: "Alice Uwimana", address: "654 Gikondo Avenue, Kicukiro 250", date: "31 Jul 2024", input: "Fertilizer Seeds", quantity: "75", status: "Approved" },
+                    { id: "R006", farmer: "Eric Cyiza", address: "987 Kanombe Road, Kicukiro 250", date: "30 Jul 2024", input: "Fertilizer Seeds", quantity: "90", status: "Pending" },
+                    { id: "R007", farmer: "Grace Mukantwari", address: "147 Gisozi Street, Gasabo 250", date: "29 Jul 2024", input: "Fertilizer Seeds", quantity: "110", status: "Approved" },
+                    { id: "R008", farmer: "Patrick Habimana", address: "258 Muhima Avenue, Nyarugenge 250", date: "28 Jul 2024", input: "Fertilizer Seeds", quantity: "85", status: "Pending" },
+                    { id: "R009", farmer: "Alice Cyiza", address: "369 Kacyiru Road, Gasabo 250", date: "27 Jul 2024", input: "Fertilizer Seeds", quantity: "95", status: "Approved" },
+                    { id: "R010", farmer: "Alice Cyiza", address: "741 Nyakabanda Street, Nyarugenge 250", date: "26 Jul 2024", input: "Fertilizer Seeds", quantity: "105", status: "Pending" },
+                    { id: "R011", farmer: "Alice Cyiza", address: "852 Kimihurura Avenue, Gasabo 250", date: "25 Jul 2024", input: "Fertilizer Seeds", quantity: "125", status: "Approved" },
+                    { id: "R012", farmer: "Alice Cyiza", address: "963 Rugando Road, Gasabo 250", date: "24 Jul 2024", input: "Fertilizer Seeds", quantity: "70", status: "Pending" },
+                    { id: "R013", farmer: "Alice Cyiza", address: "159 Kabuga Street, Gasabo 250", date: "23 Jul 2024", input: "Fertilizer Seeds", quantity: "115", status: "Approved" },
+                    { id: "R014", farmer: "Alice Cyiza", address: "357 Nyarutarama Avenue, Gasabo 250", date: "22 Jul 2024", input: "Fertilizer Seeds", quantity: "140", status: "Pending" },
+                    { id: "R015", farmer: "Alice Cyiza", address: "468 Kinyinya Road, Gasabo 250", date: "21 Jul 2024", input: "Fertilizer Seeds", quantity: "160", status: "Approved" },
+                    { id: "R016", farmer: "Alice Cyiza", address: "579 Jabana Street, Gasabo 250", date: "20 Jul 2024", input: "Fertilizer Seeds", quantity: "130", status: "Pending" },
+                    { id: "R017", farmer: "Alice Cyiza", address: "681 Rusororo Avenue, Gasabo 250", date: "19 Jul 2024", input: "Fertilizer Seeds", quantity: "180", status: "Approved" },
+                    { id: "R018", farmer: "Alice Cyiza", address: "792 Ndera Road, Gasabo 250", date: "18 Jul 2024", input: "Fertilizer Seeds", quantity: "200", status: "Pending" }
+                  ].map((request, index) => (
+                    <tr key={request.id} className={index < 17 ? "border-b border-gray-100" : ""}>
+                      <td className="py-3 px-4 text-gray-900 text-sm">{request.id}</td>
+                      <td className="py-3 px-4 text-gray-900 text-sm">{request.farmer}</td>
+                      <td className="py-3 px-4 text-gray-500 text-sm">{request.address}</td>
+                      <td className="py-3 px-4 text-gray-900 text-sm">{request.date}</td>
+                      <td className="py-3 px-4 text-gray-900 text-sm">{request.input}</td>
+                      <td className="py-3 px-4 text-gray-900 text-sm">{request.quantity}</td>
+                      <td className="py-3 px-4">
+                        <div className="flex gap-1">
+                          <button className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium hover:bg-green-200 transition-colors cursor-pointer">
+                            Approve
+                          </button>
+                          <button className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-medium hover:bg-red-200 transition-colors cursor-pointer">
+                            Decline
+                          </button>
+                          <button className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-medium hover:bg-blue-200 transition-colors cursor-pointer">
+                            Offer
+                          </button>
                         </div>
-                        <div>
-                          <p className="font-medium text-gray-900">Mary Uwimana</p>
-                          <p className="text-xs text-gray-500">Kigali, Rwanda</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 text-gray-900">NPK Fertilizer</td>
-                    <td className="py-4 px-4 text-gray-900">50 kg</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">Credit</span>
-                    </td>
-                    <td className="py-4 px-4 text-gray-900">Jan 15, 2024</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-medium">Pending</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <div className="flex gap-2">
-                        <button className="bg-green-100 cursor-pointer text-green-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-green-200 transition-colors">
-                          ✓ Approve
-                        </button>
-                        <button className="bg-red-100 cursor-pointer text-red-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-red-200 transition-colors">
-                          ✗ Decline
-                        </button>
-                        <button className="bg-blue-100 cursor-pointer text-blue-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-blue-200 transition-colors">
-                          ↗ Offer
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                          JM
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">John Mukiza</p>
-                          <p className="text-xs text-gray-500">Musanze, Rwanda</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 text-gray-900">Maize Seeds</td>
-                    <td className="py-4 px-4 text-gray-900">20 kg</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs font-medium">Purchase</span>
-                    </td>
-                    <td className="py-4 px-4 text-gray-900">Jan 14, 2024</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">Approved</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <span className="text-gray-500 text-sm">✓ Approved</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                          GN
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">Grace Nyiramana</p>
-                          <p className="text-xs text-gray-500">Huye, Rwanda</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 text-gray-900">Bean Seeds</td>
-                    <td className="py-4 px-4 text-gray-900">15 kg</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">Credit</span>
-                    </td>
-                    <td className="py-4 px-4 text-gray-900">Jan 13, 2024</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-medium">Pending</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <div className="flex gap-2">
-                        <button className="bg-green-100 text-green-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-green-200 transition-colors">
-                          ✓ Approve
-                        </button>
-                        <button className="bg-red-100 text-red-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-red-200 transition-colors">
-                          ✗ Decline
-                        </button>
-                        <button className="bg-blue-100 text-blue-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-blue-200 transition-colors">
-                          ↗ Offer
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-between items-center mt-6">
-            <p className="text-sm text-gray-600">Showing 1 to 10 of 47 results</p>
-            <div className="flex items-center gap-2">
-              <button className="p-2 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors">
+          <div className="flex justify-center items-center mt-6">
+            <div className="flex items-center gap-1">
+              <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
                 &lt;
               </button>
-              <button className="bg-green-600 text-white px-3 py-2 rounded-md  cursor-pointertext-sm font-medium">1</button>
-              <button className="px-3 py-2 text-gray-600 hover:text-gray-900 cursor-pointer transition-colors text-sm">2</button>
-              <button className="px-3 py-2 text-gray-600 cursor-pointer hover:text-gray-900 transition-colors text-sm">3</button>
-              <button className="p-2 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors">
+              <button className="w-8 h-8 flex items-center justify-center bg-green-600 text-white rounded text-sm font-medium">
+                1
+              </button>
+              <button className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors text-sm cursor-pointer">
+                2
+              </button>
+              <button className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors text-sm cursor-pointer">
+                3
+              </button>
+              <button className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors text-sm cursor-pointer">
+                4
+              </button>
+              <span className="px-2 text-gray-400">...</span>
+              <button className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors text-sm cursor-pointer">
+                10
+              </button>
+              <button className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
                 &gt;
               </button>
             </div>

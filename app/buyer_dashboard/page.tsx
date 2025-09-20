@@ -14,20 +14,25 @@ import {
   Clock,
   LayoutGrid,
   FilePlus,
+  TrendingUp,
+  Users,
+  Star,
 } from "lucide-react";
 import Link from "next/link";
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 const menuItems = [
   { label: "Dashboard", href: "/buyer_dashboard", icon: CheckCircle },
@@ -42,22 +47,25 @@ const menuItems = [
 ];
 
 const stats = [
-  { title: "Total Purchases", value: 247, icon: ShoppingCart, color: "bg-green-100 text-green-700" },
-  { title: "Active Orders", value: 12, icon: Package, color: "bg-blue-100 text-blue-700" },
-  { title: "Pending Offers", value: 8, icon: Clock, color: "bg-yellow-100 text-yellow-700" },
-  { title: "Saved Items", value: 34, icon: Heart, color: "bg-red-100 text-red-700" },
+  { title: "Total Orders", value: "247", subtitle: "This month", icon: ShoppingCart, color: "bg-green-500", textColor: "text-white" },
+  { title: "Active Farmers", value: "12", subtitle: "Connected", icon: Users, color: "bg-blue-500", textColor: "text-white" },
+  { title: "Avg Rating", value: "4.8", subtitle: "From farmers", icon: Star, color: "bg-green-500", textColor: "text-white" },
+  { title: "Growth", value: "+23%", subtitle: "This month", icon: TrendingUp, color: "bg-green-500", textColor: "text-white" },
 ];
 
 const produce = [
-  { name: "Premium Maize", price: "500 RWF/kg", available: "50kg available", farmer: "Jean Baptiste", image: "/maize.png" },
-  { name: "Organic Beans", price: "800 RWF/kg", available: "30kg available", farmer: "Marie Claire", image: "/green-beans.png" },
-  { name: "Irish Potatoes", price: "350 RWF/kg", available: "100kg available", farmer: "Patrick Ndayimana", image: "/potatoes.png" },
+  { name: "Premium Maize", price: "500 RWF/kg", available: "50kg available", farmer: "Jean Baptiste", image: "/maize.png", rating: "4.8", reviews: "24" },
+  { name: "Premium Maize", price: "500 RWF/kg", available: "50kg available", farmer: "Jean Baptiste", image: "/maize.png", rating: "4.8", reviews: "24" },
+  { name: "Premium Maize", price: "500 RWF/kg", available: "50kg available", farmer: "Jean Baptiste", image: "/maize.png", rating: "4.8", reviews: "24" },
+  { name: "Premium Maize", price: "500 RWF/kg", available: "50kg available", farmer: "Jean Baptiste", image: "/maize.png", rating: "4.8", reviews: "24" },
+  { name: "Premium Maize", price: "500 RWF/kg", available: "50kg available", farmer: "Jean Baptiste", image: "/maize.png", rating: "4.8", reviews: "24" },
 ];
 
 const orders = [
-  { id: "#ORD-001", product: "Maize (25kg)", farmer: "Jean Baptiste", amount: "12,500 RWF", status: "Pending" },
-  { id: "#ORD-002", product: "Beans (15kg)", farmer: "Marie Claire", amount: "12,000 RWF", status: "Delivered" },
-  { id: "#ORD-003", product: "Potatoes (40kg)", farmer: "Patrick Ndahimana", amount: "14,000 RWF", status: "In Transit" },
+  { id: "001", farmer: "Jean Baptiste", address: "123 Kigali Avenue, Kigali City", date: "12 Jan 2024", product: "Maize Seeds", status: "Processing", action: "View Order" },
+  { id: "002", farmer: "Marie Claire", address: "456 Nyamirambo Street, Kigali", date: "10 Jan 2024", product: "Bean Seeds", status: "Delivered", action: "View Order" },
+  { id: "003", farmer: "Patrick Ndayimana", address: "789 Kimisagara Road, Kigali", date: "08 Jan 2024", product: "Potato Seeds", status: "In Transit", action: "View Order" },
+  { id: "004", farmer: "Alice Uwimana", address: "321 Remera Avenue, Gasabo", date: "05 Jan 2024", product: "Corn Seeds", status: "Processing", action: "View Order" },
 ];
 
 const Logo = () => (
@@ -69,10 +77,20 @@ const Logo = () => (
 
 export default function BuyerDashboard() {
   const chartData = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [
-      { label: "Online Sales", data: [20, 25, 22, 18, 24, 30, 28], backgroundColor: "#3b82f6" },
-      { label: "Offline Sales", data: [15, 18, 20, 14, 19, 24, 21], backgroundColor: "#10b981" },
+      {
+        label: "Market Trends",
+        data: [65, 59, 80, 81, 56, 55, 70, 85, 90, 95, 88, 92],
+        fill: true,
+        backgroundColor: "rgba(34, 197, 94, 0.2)",
+        borderColor: "rgb(34, 197, 94)",
+        tension: 0.4,
+        pointBackgroundColor: "rgb(34, 197, 94)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(34, 197, 94)",
+      },
     ],
   };
 
@@ -86,7 +104,7 @@ export default function BuyerDashboard() {
       {/* Sidebar + Main content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <aside className="w-64 bg-white border-r flex flex-col">
+        <aside className="w-64 bg-green-600 flex flex-col">
           <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             {menuItems.map((item, index) => {
               const isActive = item.label === "Dashboard";
@@ -99,19 +117,19 @@ export default function BuyerDashboard() {
                       className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium
                         ${
                           isActive
-                            ? "bg-green-600 text-white shadow-sm"
-                            : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                            ? "bg-white text-green-600 shadow-sm"
+                            : "text-white hover:bg-green-700"
                         }`}
                     >
                       <Icon
                         className={`w-5 h-5 ${
-                          isActive ? "text-white" : "text-gray-500"
+                          isActive ? "text-green-600" : "text-white"
                         }`}
                       />
                       <span>{item.label}</span>
                     </div>
                   </Link>
-                  {showDivider && <div className="border-t border-gray-200 my-2 mx-4"></div>}
+                  {showDivider && <div className="border-t border-green-500 my-2 mx-4"></div>}
                 </div>
               );
             })}
@@ -132,24 +150,88 @@ export default function BuyerDashboard() {
             {stats.map((stat) => {
               const Icon = stat.icon;
               return (
-                <div key={stat.title} className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-4">
-                  <div className={`p-3 rounded-full ${stat.color}`}>
+                <div key={stat.title} className={`${stat.color} p-6 rounded-lg shadow-sm flex items-center gap-4 ${stat.textColor}`}>
+                  <div className="bg-white bg-opacity-20 p-3 rounded-full">
                     <Icon className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-900">{stat.title}</p>
-                    <p className="text-lg font-bold text-gray-800">{stat.value}</p>
+                    <p className="text-sm opacity-90">{stat.title}</p>
+                    <p className="text-2xl font-bold">{stat.value}</p>
+                    <p className="text-xs opacity-75">{stat.subtitle}</p>
                   </div>
                 </div>
               );
             })}
           </div>
 
-          {/* Chart */}
-          <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
-            <h2 className="font-semibold mb-4 text-gray-600">Market Trends</h2>
-            <div className="h-64">
-              <Bar data={chartData} options={{ responsive: true, maintainAspectRatio: false }} />
+          {/* Chart and Map Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            {/* Chart */}
+            <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h2 className="font-semibold text-gray-600">Market Trends Prices</h2>
+                  <p className="text-3xl font-bold text-gray-900 mt-2">390,548.03</p>
+                  <p className="text-sm text-gray-500">RWF</p>
+                </div>
+                <div className="flex gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-red-400 rounded"></div>
+                    <span className="text-gray-600">Expensive</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-blue-400 rounded"></div>
+                    <span className="text-gray-600">Profit</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-green-400 rounded"></div>
+                    <span className="text-gray-600">Cheap</span>
+                  </div>
+                </div>
+              </div>
+              <div className="h-64">
+                <Line 
+                  data={chartData} 
+                  options={{ 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        display: false,
+                      },
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        grid: {
+                          color: "rgba(0, 0, 0, 0.1)",
+                        },
+                      },
+                      x: {
+                        grid: {
+                          display: false,
+                        },
+                      },
+                    },
+                  }} 
+                />
+              </div>
+            </div>
+            
+            {/* Map Section */}
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="font-semibold text-gray-600 mb-4">Regional Overview</h3>
+              <div className="relative h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-2 mx-auto">
+                    <svg className="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-gray-600">Rwanda Map</p>
+                  <p className="text-xs text-gray-500 mt-1">Active regions: 5</p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -159,17 +241,23 @@ export default function BuyerDashboard() {
               <h2 className="font-semibold text-gray-600">Recommended Produce</h2>
               <a href="#" className="text-green-600 text-sm">View All</a>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {produce.map((item) => (
-                <div key={item.name} className="bg-white rounded-lg shadow-sm border overflow-hidden">
-                  <img src={item.image} alt={item.name} className="h-40 w-full object-cover" />
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900">{item.name}</h3>
-                    <p className="text-sm text-gray-500">by {item.farmer}</p>
-                    <p className="text-green-600 font-bold">{item.price} <span className="text-sm font-medium text-gray-500 ml-64"> {item.available}</span></p>
-                    <p ></p>
-                    
-                    <button className="mt-3 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+              {produce.map((item, index) => (
+                <div key={`${item.name}-${index}`} className="bg-white rounded-lg shadow-sm border overflow-hidden">
+                  <img src={item.image} alt={item.name} className="h-32 w-full object-cover" />
+                  <div className="p-3">
+                    <h3 className="font-semibold text-gray-900 text-sm">{item.name}</h3>
+                    <p className="text-xs text-gray-500">by {item.farmer}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                      <span className="text-xs text-gray-600">{item.rating}</span>
+                      <span className="text-xs text-gray-400">({item.reviews})</span>
+                    </div>
+                    <div className="mt-2">
+                      <p className="text-green-600 font-bold text-sm">{item.price}</p>
+                      <p className="text-xs text-gray-500">{item.available}</p>
+                    </div>
+                    <button className="mt-2 w-full bg-green-600 text-white px-3 py-1.5 rounded text-xs hover:bg-green-700">
                       Contact
                     </button>
                   </div>
@@ -179,47 +267,57 @@ export default function BuyerDashboard() {
           </div>
 
           {/* Recent Orders */}
-          <div className="bg-white rounded-lg shadow-sm p-4">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="font-semibold text-gray-600" >Recent Orders</h2>
-              <a href="#" className="text-green-600 text-sm">View All</a>
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="font-semibold text-gray-600">Recent Orders</h2>
+              <a href="#" className="text-green-600 text-sm hover:underline">View All</a>
             </div>
-            <table className="w-full text-sm text-gray-600">
-              <thead>
-                <tr className="border-b">
-                  <th className="py-2 text-left">Order ID</th>
-                  <th className="py-2 text-left">Product</th>
-                  <th className="py-2 text-left">Farmer</th>
-                  <th className="py-2 text-left">Amount</th>
-                  <th className="py-2 text-left">Status</th>
-                  <th className="py-2 text-left">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((order) => (
-                  <tr key={order.id} className="border-b">
-                    <td className="py-2">{order.id}</td>
-                    <td className="py-2">{order.product}</td>
-                    <td className="py-2">{order.farmer}</td>
-                    <td className="py-2">{order.amount}</td>
-                    <td className="py-2">
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-medium ${
-                          order.status === "Pending"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : order.status === "Delivered"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-blue-100 text-blue-700"
-                        }`}
-                      >
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="py-2 text-green-600 cursor-pointer">View</td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="py-3 text-left text-gray-500 font-medium">ID</th>
+                    <th className="py-3 text-left text-gray-500 font-medium">FARMER</th>
+                    <th className="py-3 text-left text-gray-500 font-medium">ADDRESS</th>
+                    <th className="py-3 text-left text-gray-500 font-medium">DATE</th>
+                    <th className="py-3 text-left text-gray-500 font-medium">PRODUCT</th>
+                    <th className="py-3 text-left text-gray-500 font-medium">STATUS</th>
+                    <th className="py-3 text-left text-gray-500 font-medium">ACTION</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {orders.map((order) => (
+                    <tr key={order.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-4 text-gray-900">{order.id}</td>
+                      <td className="py-4 text-gray-900">{order.farmer}</td>
+                      <td className="py-4 text-gray-600">{order.address}</td>
+                      <td className="py-4 text-gray-600">{order.date}</td>
+                      <td className="py-4 text-gray-900">{order.product}</td>
+                      <td className="py-4">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            order.status === "Processing"
+                              ? "bg-purple-100 text-purple-700"
+                              : order.status === "Delivered"
+                              ? "bg-green-100 text-green-700"
+                              : order.status === "In Transit"
+                              ? "bg-blue-100 text-blue-700"
+                              : "bg-gray-100 text-gray-700"
+                          }`}
+                        >
+                          {order.status}
+                        </span>
+                      </td>
+                      <td className="py-4">
+                        <button className="text-green-600 hover:text-green-700 font-medium">
+                          {order.action}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {/* Footer */}

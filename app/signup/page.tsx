@@ -20,12 +20,12 @@ export default function SignUp() {
   ];
 
   const [formData, setFormData] = useState({
-    fullName: "",
+    names: "",
     email: "",
     phoneNumber: "",
     password: "",
     agreeToTerms: false,
-    accountType: "farmer", // default
+    role: "FARMER", // default
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -40,23 +40,91 @@ export default function SignUp() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate required fields
+    if (!formData.names || !formData.email || !formData.phoneNumber || !formData.password) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    if (!formData.role) {
+      alert("Please select an account type.");
+      return;
+    }
+
+    if (!formData.agreeToTerms) {
+      alert("Please agree to the terms and conditions.");
+      return;
+    }
+
+    // Prepare the request body according to the API specification
+    const requestBody = {
+      names: formData.names,
+      email: formData.email,
+      phoneNumber: formData.phoneNumber,
+      password: formData.password,
+      role: formData.role
+    };
+
+    // Debug: Log the request body to ensure role is included
+    console.log("Request body being sent:", requestBody);
+    console.log("Current form data:", formData);
+
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/users/register`, {
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/register`;
+
+      const res = await fetch(apiUrl, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody)
       });
-      if (!res.ok) throw new Error(`Error: ${res.status}`);
-      const data = await res.json();
-      console.log("Account created:", data);
-      router.push("/signin?from=signup");
-    } catch (err) {
+
+      if (!res.ok) {
+        const errorData = await res.text();
+        throw new Error(`Registration failed: ${res.status} - ${errorData}`);
+      }
+
+      const response = await res.json();
+      console.log("Account created successfully:", response);
+
+      if (response.success && response.data) {
+        // Store the token in localStorage for future use
+        if (response.data.token) {
+          localStorage.setItem('authToken', response.data.token);
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+        }
+
+        alert(`Welcome ${response.data.user.names}! Your account has been created successfully.`);
+        router.push("/signin?from=signup&registered=true");
+      } else {
+        throw new Error(response.message || "Registration failed");
+      }
+
+    } catch (err: any) {
       console.error("Signup failed:", err);
-      alert("Signup failed. Please try again.");
+
+      // Provide more specific error messages
+      if (err.message.includes('Failed to fetch')) {
+        alert("Network error: Unable to reach the registration server. Please check your connection and try again.");
+      } else if (err.message.includes('400')) {
+        alert("Invalid registration data. Please check your information and try again.");
+      } else if (err.message.includes('409')) {
+        alert("An account with this email already exists. Please try signing in instead.");
+      } else if (err.message.includes('500')) {
+        alert("Server error. Please try again later.");
+      } else {
+        alert(`Registration failed: ${err.message || 'Unknown error occurred'}`);
+      }
     }
   };
 
-  const accountTypes = ["farmer", "supplier", "buyer"];
+  const accountTypes = [
+    { value: "FARMER", label: "Farmer" },
+    { value: "SUPPLIER", label: "Supplier" },
+    { value: "BUYER", label: "Buyer" }
+  ];
 
   return (
     <div className="w-full min-h-screen bg-gray-50 flex flex-col items-center">
@@ -122,14 +190,14 @@ export default function SignUp() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="fullName" className="text-gray-700 font-medium text-sm">
+            <Label htmlFor="names" className="text-gray-700 font-medium text-sm">
               Full Name
             </Label>
             <Input
-              id="fullName"
-              name="fullName"
+              id="names"
+              name="names"
               placeholder="John Doe"
-              value={formData.fullName}
+              value={formData.names}
               onChange={handleInputChange}
               className="text-gray-700 font-medium text-sm border border-gray-300"
               required
@@ -174,16 +242,16 @@ export default function SignUp() {
             </Label>
             <div className="flex gap-4 mt-2 mb-5">
               {accountTypes.map((type) => (
-                <div key={type} className="flex items-center gap-2">
+                <div key={type.value} className="flex items-center gap-2">
                   <Switch
-                    id={type}
-                    checked={formData.accountType === type}
+                    id={type.value}
+                    checked={formData.role === type.value}
                     onCheckedChange={() =>
-                      setFormData((prev) => ({ ...prev, accountType: type }))
+                      setFormData((prev) => ({ ...prev, role: type.value }))
                     }
                     className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-gray-200"
                   />
-                  <span className="capitalize text-gray-700 text-sm">{type}</span>
+                  <span className="text-gray-700 text-sm">{type.label}</span>
                 </div>
               ))}
             </div>

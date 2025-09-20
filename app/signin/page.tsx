@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import AuthNavbar from "./navbar";
@@ -8,6 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
+import {
+  storeAuthData,
+  redirectToDashboard,
+  isAuthenticated,
+  type LoginResponse
+} from "@/lib/auth";
 
 export default function SignIn() {
   const router = useRouter();
@@ -15,25 +21,57 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+  // Check if user is already authenticated and handle URL parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isLogout = urlParams.get('logout');
+    const fromSignup = urlParams.get('from');
+    const registered = urlParams.get('registered');
+
+    if (isLogout) {
+      setErrorMsg("");
+      console.log("User logged out successfully");
+    }
+
+    if (fromSignup && registered) {
+      setErrorMsg("");
+      console.log("Registration successful, please sign in");
+    }
+
+    if (isAuthenticated() && !isLogout) {
+      console.log("User already authenticated, redirecting to dashboard");
+      redirectToDashboard(router);
+    } else {
+      setIsCheckingAuth(false);
+    }
+  }, [router]);
+
+  // Load saved credentials if remember me was enabled
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberedEmail');
+    const savedRememberMe = localStorage.getItem('rememberMe') === 'true';
+
+    if (savedEmail && savedRememberMe) {
+      setFormData(prev => ({ ...prev, email: savedEmail }));
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const redirectToDashboard = (userRole: string) => {
-    switch (userRole) {
-      case "farmer":
-        router.push("/farmer_dashboard");
-        break;
-      case "supplier":
-        router.push("/supplier_dashboard");
-        break;
-      case "buyer":
-        router.push("/buyer_dashboard");
-        break;
-      default:
-        router.push("/farmer_dashboard");
+  const handleRememberMe = (email: string) => {
+    if (rememberMe) {
+      localStorage.setItem('rememberedEmail', email);
+      localStorage.setItem('rememberMe', 'true');
+    } else {
+      localStorage.removeItem('rememberedEmail');
+      localStorage.removeItem('rememberMe');
     }
   };
 
@@ -42,34 +80,80 @@ export default function SignIn() {
     setLoading(true);
     setErrorMsg("");
 
+    // Validate form data
+    if (!formData.email || !formData.password) {
+      setErrorMsg("Please fill in all fields.");
+      setLoading(false);
+      return;
+    }
+
+    console.log("Attempting login with:", { email: formData.email });
+
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/signin`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password
+          }),
         }
       );
 
-      if (!res.ok) throw new Error("Sign in failed");
-
-      const data = await res.json();
-
-      if (data.token) localStorage.setItem("token", data.token);
-      if (data.role) {
-        localStorage.setItem("userRole", data.role);
-        redirectToDashboard(data.role);
-      } else {
-        redirectToDashboard("farmer");
+      if (!res.ok) {
+        const errorData = await res.text();
+        throw new Error(`Login failed: ${res.status} - ${errorData}`);
       }
-    } catch (error) {
+
+      const response: LoginResponse = await res.json();
+      console.log("Login response:", response);
+
+      if (response.success && response.data) {
+        // Store authentication data using utility
+        storeAuthData(response.data);
+
+        // Handle remember me functionality
+        handleRememberMe(formData.email);
+
+        console.log("Login successful for user:", response.data.user.names);
+        console.log("User role:", response.data.user.role);
+
+        // Redirect based on role using utility
+        redirectToDashboard(router, response.data.user.role);
+      } else {
+        throw new Error(response.message || "Login failed");
+      }
+    } catch (error: any) {
       console.error("Error signing in:", error);
-      setErrorMsg("Invalid credentials. Please try again.");
+
+      // Provide specific error messages
+      if (error.message.includes('401')) {
+        setErrorMsg("Invalid email or password. Please try again.");
+      } else if (error.message.includes('404')) {
+        setErrorMsg("Account not found. Please check your email or sign up.");
+      } else if (error.message.includes('Failed to fetch')) {
+        setErrorMsg("Network error. Please check your connection and try again.");
+      } else {
+        setErrorMsg(error.message || "Login failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
   };
+
+  // Show loading while checking authentication
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-h-screen bg-gray-50 flex justify-center">
@@ -139,6 +223,8 @@ export default function SignIn() {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="remember"
+                    checked={rememberMe}
+                    onCheckedChange={setRememberMe}
                     className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-white"
                   />
                   <Label htmlFor="remember" className="text-gray-700 font-medium text-sm">

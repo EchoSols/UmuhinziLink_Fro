@@ -4,16 +4,35 @@ import { Plus, Search, Send } from "lucide-react";
 import { BiLeftArrow } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 
-const mockContacts = [
-  { id: 1, name: "John's Agro Store", role: "Supplier" },
+interface Contact {
+  id: number;
+  name: string;
+  role: string;
+}
+
+interface Message {
+  text: string;
+  sender: string;
+  timestamp: string;
+}
+
+interface Conversation {
+  id: number;
+  name: string;
+  role: string;
+  messages: Message[];
+}
+
+const mockContacts: Contact[] = [
+  { id: 1, name: "John&apos;s Agro Store", role: "Supplier" },
   { id: 2, name: "Fresh Market Ltd", role: "Buyer" },
   { id: 3, name: "Organic Co-op", role: "Buyer" },
   { id: 4, name: "Farm Tools & More", role: "Supplier" },
 ];
 
 export default function FarmerMessages() {
-  const [conversations, setConversations] = useState<any[]>([]);
-  const [activeChat, setActiveChat] = useState<any>(null);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeChat, setActiveChat] = useState<Conversation | null>(null);
   const [message, setMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -28,7 +47,7 @@ export default function FarmerMessages() {
   }, [conversations]);
 
   const sendMessage = () => {
-    if (!message.trim()) return;
+    if (!message.trim() || !activeChat) return;
     const updated = conversations.map((conv) =>
       conv.id === activeChat.id
         ? {
@@ -38,7 +57,7 @@ export default function FarmerMessages() {
               {
                 sender: "Farmer",
                 text: message,
-                time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
               },
             ],
           }
@@ -48,7 +67,7 @@ export default function FarmerMessages() {
     setMessage("");
   };
 
-  const startConversation = (contact: any) => {
+  const startConversation = (contact: Contact) => {
     const existing = conversations.find((c) => c.name === contact.name);
     if (existing) {
       setActiveChat(existing);
@@ -126,7 +145,7 @@ export default function FarmerMessages() {
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
-              {activeChat.messages.map((msg: any, i: number) => (
+              {activeChat.messages.map((msg: Message, i: number) => (
                 <div
                   key={i}
                   className={`flex ${

@@ -136,7 +136,7 @@ export function hasAnyRole(roles: User["role"][]): boolean {
 /**
  * Redirect to appropriate dashboard based on user role
  */
-export function redirectToDashboard(router: any, role?: User["role"]): void {
+export function redirectToDashboard(router: { push: (path: string) => void }, role?: User["role"]): void {
   const userRole = role || getUserRole();
   if (!userRole) {
     console.warn("No role found, redirecting to farmer dashboard");
@@ -152,7 +152,7 @@ export function redirectToDashboard(router: any, role?: User["role"]): void {
 /**
  * Logout user and clear all authentication data
  */
-export function logout(router?: any): void {
+export function logout(router?: { push: (path: string) => void }): void {
   console.log("Logging out user");
   clearAuthData();
   

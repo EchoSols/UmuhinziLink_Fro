@@ -96,7 +96,7 @@ export default function NewRequest() {
   );
 }
 
-function Input({ label, ...props }: any) {
+function Input({ label, ...props }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div>
       <label className="block mb-1 font-medium text-gray-700">{label}</label>

@@ -151,33 +151,35 @@ export default function SignIn() {
       } else {
         throw new Error(response.message || "Login failed");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error signing in:", error);
 
       // Provide specific error messages
       let errorTitle = "Login Failed";
       let errorDescription = "Please try again.";
       
-      if (error.message.includes('401')) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      
+      if (errorMessage.includes('401')) {
         errorTitle = "Invalid Credentials";
         errorDescription = "Invalid email or password. Please try again.";
-      } else if (error.message.includes('404')) {
+      } else if (errorMessage.includes('404')) {
         errorTitle = "Account Not Found";
         errorDescription = "Account not found. Please check your email or sign up.";
-      } else if (error.message.includes('403')) {
+      } else if (errorMessage.includes('403')) {
         errorTitle = "Account Disabled";
         errorDescription = "Your account is disabled. Please contact support.";
-      } else if (error.message.includes('429')) {
+      } else if (errorMessage.includes('429')) {
         errorTitle = "Too Many Attempts";
         errorDescription = "Too many login attempts. Please try again later.";
-      } else if (error.message.includes('500')) {
+      } else if (errorMessage.includes('500')) {
         errorTitle = "Server Error";
         errorDescription = "Server error. Please try again later.";
-      } else if (error.message.includes('Failed to fetch')) {
+      } else if (errorMessage.includes('Failed to fetch')) {
         errorTitle = "Network Error";
         errorDescription = "Network error. Please check your connection and try again.";
-      } else if (error.message) {
-        errorDescription = error.message;
+      } else if (errorMessage) {
+        errorDescription = errorMessage;
       }
       
       addToast({

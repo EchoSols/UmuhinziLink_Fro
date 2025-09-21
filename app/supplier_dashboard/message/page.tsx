@@ -2,7 +2,26 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Search, Send } from "lucide-react";
 
-const mockContacts = [
+interface Contact {
+  id: number;
+  name: string;
+  role: string;
+}
+
+interface Message {
+  text: string;
+  sender: string;
+  timestamp: string;
+}
+
+interface Conversation {
+  id: number;
+  name: string;
+  role: string;
+  messages: Message[];
+}
+
+const mockContacts: Contact[] = [
   { id: 1, name: "Harvest Hill Farm", role: "Farmer" },
   { id: 2, name: "Green Valley Co-op", role: "Farmer" },
   { id: 3, name: "AgroBuy Exporters", role: "Buyer" },
@@ -10,8 +29,8 @@ const mockContacts = [
 ];
 
 export default function SupplierMessages() {
-  const [conversations, setConversations] = useState<any[]>([]);
-  const [activeChat, setActiveChat] = useState<any>(null);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeChat, setActiveChat] = useState<Conversation | null>(null);
   const [message, setMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -26,7 +45,7 @@ export default function SupplierMessages() {
   }, [conversations]);
 
   const sendMessage = () => {
-    if (!message.trim()) return;
+    if (!message.trim() || !activeChat) return;
     const updated = conversations.map((conv) =>
       conv.id === activeChat.id
         ? {
@@ -36,7 +55,7 @@ export default function SupplierMessages() {
               {
                 sender: "Supplier",
                 text: message,
-                time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
               },
             ],
           }
@@ -46,7 +65,7 @@ export default function SupplierMessages() {
     setMessage("");
   };
 
-  const startConversation = (contact: any) => {
+  const startConversation = (contact: Contact) => {
     const existing = conversations.find((c) => c.name === contact.name);
     if (existing) {
       setActiveChat(existing);
@@ -119,7 +138,7 @@ export default function SupplierMessages() {
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
-              {activeChat.messages.map((msg: any, i: number) => (
+              {activeChat.messages.map((msg: Message, i: number) => (
                 <div
                   key={i}
                   className={`flex ${
@@ -134,7 +153,7 @@ export default function SupplierMessages() {
                     }`}
                   >
                     {msg.text}
-                    <div className="text-[10px] mt-1 opacity-70">{msg.time}</div>
+                    <div className="text-[10px] mt-1 opacity-70">{msg.timestamp}</div>
                   </div>
                 </div>
               ))}

@@ -128,7 +128,7 @@ function Dashboard() {
             <div>
               <p className="text-sm text-gray-500 mb-1">Tuesday, 16 July 2024</p>
               <h1 className="text-2xl font-bold text-gray-900 mb-1">Good Morning 👋</h1>
-              <p className="text-gray-600">Here's what's happening with your farm today.</p>
+              <p className="text-gray-600">Here&apos;s what&apos;s happening with your farm today.</p>
             </div>
             {/* Stats Cards */}
             <div className="grid grid-cols-5 gap-4">
@@ -222,7 +222,7 @@ function Dashboard() {
               {/* Weather Card */}
               <div className="bg-gradient-to-br from-teal-500 to-green-600 rounded-2xl p-6 text-white shadow-md">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium">Today's Weather</h3>
+                  <h3 className="text-lg font-medium">Today&apos;s Weather</h3>
                   <CloudSun className="w-8 h-8 opacity-90" />
                 </div>
                 <div className="mb-6">
@@ -252,7 +252,7 @@ function Dashboard() {
                 <div className="space-y-3">
                   <div className="bg-green-50 border-l-4 border-green-400 p-4 rounded-lg">
                     <p className="font-medium text-gray-900 mb-1">🌱 Planting Season</p>
-                    <p className="text-sm text-gray-600">It's the perfect time to plant seeds. Prepare early for the best harvest results.</p>
+                    <p className="text-sm text-gray-600">It&apos;s the perfect time to plant seeds. Prepare early for the best harvest results.</p>
                   </div>
                   <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg">
                     <p className="font-medium text-gray-900 mb-1">🌧️ Weather Alert</p>

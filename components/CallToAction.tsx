@@ -28,7 +28,7 @@ export default function CallToAction() {
   );
 }
 
-function UsersIcon(props: any) {
+function UsersIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg {...props} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
       <path d="M16 21v-2a4 4 0 0 0-8 0v2"></path>
@@ -36,7 +36,7 @@ function UsersIcon(props: any) {
     </svg>
   );
 }
-function BriefcaseIcon(props: any) {
+function BriefcaseIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg {...props} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
       <rect x="2" y="7" width="20" height="14" rx="2"></rect>
@@ -44,7 +44,7 @@ function BriefcaseIcon(props: any) {
     </svg>
   );
 }
-function MessageSquareIcon(props: any) {
+function MessageSquareIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg {...props} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>

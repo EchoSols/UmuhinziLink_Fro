@@ -254,7 +254,7 @@ function Dashboard() {
                   </tr>
                   <tr className="border-b border-gray-100">
                     <td className="py-4 px-4 text-gray-900 font-medium">02</td>
-                    <td className="py-4 px-4 text-gray-900">Disney Princess Pink Bag 18"</td>
+                    <td className="py-4 px-4 text-gray-900">Disney Princess Pink Bag 18&quot;</td>
                     <td className="py-4 px-4">
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div className="bg-green-500 h-2 rounded-full" style={{width: '70%'}}></div>

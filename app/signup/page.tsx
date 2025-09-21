@@ -165,30 +165,32 @@ export default function SignUp() {
         throw new Error(response.message || "Invalid response format from server");
       }
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Signup failed:", err);
 
       // Provide more specific error messages based on error type
       let errorTitle = "Registration Failed";
       let errorDescription = "Please try again.";
       
-      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      
+      if (errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError')) {
         errorTitle = "Network Error";
         errorDescription = "Unable to reach the registration server. Please check your connection and try again.";
-      } else if (err.message.includes('400')) {
+      } else if (errorMessage.includes('400')) {
         errorTitle = "Invalid Data";
         errorDescription = "Please check your information and try again.";
-      } else if (err.message.includes('409')) {
+      } else if (errorMessage.includes('409')) {
         errorTitle = "Account Already Exists";
         errorDescription = "An account with this email already exists. Please try signing in instead.";
-      } else if (err.message.includes('422')) {
+      } else if (errorMessage.includes('422')) {
         errorTitle = "Invalid Format";
         errorDescription = "Please check your information and try again.";
-      } else if (err.message.includes('500')) {
+      } else if (errorMessage.includes('500')) {
         errorTitle = "Server Error";
         errorDescription = "Please try again later.";
-      } else if (err.message) {
-        errorDescription = err.message;
+      } else if (errorMessage) {
+        errorDescription = errorMessage;
       }
       
       addToast({

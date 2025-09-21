@@ -9,10 +9,12 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
 import { data } from "../signin/navbar";
 
 export default function SignUp() {
   const router = useRouter();
+  const { addToast } = useToast();
 
   const socialLinks = [
     { icon: <BiLogoFacebookCircle size={25} />, link: "https://facebook.com" },
@@ -43,17 +45,60 @@ export default function SignUp() {
 
     // Validate required fields
     if (!formData.names || !formData.email || !formData.phoneNumber || !formData.password) {
-      alert("Please fill in all required fields.");
+      addToast({
+        type: 'error',
+        title: 'Missing Information',
+        description: 'Please fill in all required fields.',
+      });
       return;
     }
 
     if (!formData.role) {
-      alert("Please select an account type.");
+      addToast({
+        type: 'error',
+        title: 'Account Type Required',
+        description: 'Please select an account type.',
+      });
       return;
     }
 
     if (!formData.agreeToTerms) {
-      alert("Please agree to the terms and conditions.");
+      addToast({
+        type: 'error',
+        title: 'Terms & Conditions',
+        description: 'Please agree to the terms and conditions.',
+      });
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      addToast({
+        type: 'error',
+        title: 'Invalid Email',
+        description: 'Please enter a valid email address.',
+      });
+      return;
+    }
+
+    // Validate phone number format (basic validation)
+    if (formData.phoneNumber.length < 10) {
+      addToast({
+        type: 'error',
+        title: 'Invalid Phone Number',
+        description: 'Please enter a valid phone number.',
+      });
+      return;
+    }
+
+    // Validate password length
+    if (formData.password.length < 6) {
+      addToast({
+        type: 'error',
+        title: 'Password Too Short',
+        description: 'Password must be at least 6 characters long.',
+      });
       return;
     }
 
@@ -71,7 +116,8 @@ export default function SignUp() {
     console.log("Current form data:", formData);
 
     try {
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/register`;
+      // Use the Next.js API route to avoid CORS issues
+      const apiUrl = "/api/auth/register";
 
       const res = await fetch(apiUrl, {
         method: "POST",
@@ -82,41 +128,75 @@ export default function SignUp() {
       });
 
       if (!res.ok) {
-        const errorData = await res.text();
-        throw new Error(`Registration failed: ${res.status} - ${errorData}`);
+        let errorMessage = `Registration failed: ${res.status}`;
+        try {
+          const errorData = await res.json();
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch {
+          const errorText = await res.text();
+          errorMessage = errorText || errorMessage;
+        }
+        throw new Error(errorMessage);
       }
 
       const response = await res.json();
       console.log("Account created successfully:", response);
 
-      if (response.success && response.data) {
-        // Store the token in localStorage for future use
-        if (response.data.token) {
-          localStorage.setItem('authToken', response.data.token);
-          localStorage.setItem('user', JSON.stringify(response.data.user));
-        }
-
-        alert(`Welcome ${response.data.user.names}! Your account has been created successfully.`);
-        router.push("/signin?from=signup&registered=true");
+      // Validate response structure matches API specification
+      if (response.success && response.data && response.data.token && response.data.user) {
+        // Store the token and user data in localStorage for future use
+        localStorage.setItem('authToken', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        
+        // Show success message with user's name
+        const userName = response.data.user.names || 'User';
+        addToast({
+          type: 'success',
+          title: 'Account Created Successfully!',
+          description: `Welcome ${userName}! Your account has been created successfully.`,
+          duration: 4000,
+        });
+        
+        // Redirect to signin page with success indicator after a short delay
+        setTimeout(() => {
+          router.push("/signin?from=signup&registered=true");
+        }, 1500);
       } else {
-        throw new Error(response.message || "Registration failed");
+        throw new Error(response.message || "Invalid response format from server");
       }
 
     } catch (err: any) {
       console.error("Signup failed:", err);
 
-      // Provide more specific error messages
-      if (err.message.includes('Failed to fetch')) {
-        alert("Network error: Unable to reach the registration server. Please check your connection and try again.");
+      // Provide more specific error messages based on error type
+      let errorTitle = "Registration Failed";
+      let errorDescription = "Please try again.";
+      
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        errorTitle = "Network Error";
+        errorDescription = "Unable to reach the registration server. Please check your connection and try again.";
       } else if (err.message.includes('400')) {
-        alert("Invalid registration data. Please check your information and try again.");
+        errorTitle = "Invalid Data";
+        errorDescription = "Please check your information and try again.";
       } else if (err.message.includes('409')) {
-        alert("An account with this email already exists. Please try signing in instead.");
+        errorTitle = "Account Already Exists";
+        errorDescription = "An account with this email already exists. Please try signing in instead.";
+      } else if (err.message.includes('422')) {
+        errorTitle = "Invalid Format";
+        errorDescription = "Please check your information and try again.";
       } else if (err.message.includes('500')) {
-        alert("Server error. Please try again later.");
-      } else {
-        alert(`Registration failed: ${err.message || 'Unknown error occurred'}`);
+        errorTitle = "Server Error";
+        errorDescription = "Please try again later.";
+      } else if (err.message) {
+        errorDescription = err.message;
       }
+      
+      addToast({
+        type: 'error',
+        title: errorTitle,
+        description: errorDescription,
+        duration: 6000,
+      });
     }
   };
 

@@ -8,6 +8,7 @@ import {
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area } from 'recharts';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
+import { FarmerGuard } from '@/components/auth/AuthGuard';
 
 //menu items
 const menuItems = [
@@ -39,7 +40,7 @@ const chartData = [
   { name: 'Dec', value: 420000 }
 ];
 
-export default function Dashboard() {
+function Dashboard() {
   const Logo = () => (
     <div className="flex items-center px-6 py-4">
       <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center mr-3">
@@ -414,5 +415,13 @@ export default function Dashboard() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function FarmerDashboard() {
+  return (
+    <FarmerGuard>
+      <Dashboard />
+    </FarmerGuard>
   );
 }

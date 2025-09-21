@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Line } from "react-chartjs-2";
+import { BuyerGuard } from '@/components/auth/AuthGuard';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -75,7 +76,7 @@ const Logo = () => (
   </span>
 );
 
-export default function BuyerDashboard() {
+function BuyerDashboard() {
   const chartData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [
@@ -330,5 +331,13 @@ export default function BuyerDashboard() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function BuyerDashboardPage() {
+  return (
+    <BuyerGuard>
+      <BuyerDashboard />
+    </BuyerGuard>
   );
 }

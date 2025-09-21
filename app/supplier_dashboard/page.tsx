@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { SupplierGuard } from '@/components/auth/AuthGuard';
 
 const Logo = () => (
   <div className="flex items-center gap-2">
@@ -30,7 +31,7 @@ const menuItems = [
 ];
 
 
-export default function Dashboard() {
+function Dashboard() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Header */}
@@ -327,5 +328,13 @@ export default function Dashboard() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function SupplierDashboardPage() {
+  return (
+    <SupplierGuard>
+      <Dashboard />
+    </SupplierGuard>
   );
 }

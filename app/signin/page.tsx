@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
 import { Eye, EyeOff } from "lucide-react";
 import {
   storeAuthData,
@@ -17,9 +18,9 @@ import {
 
 export default function SignIn() {
   const router = useRouter();
+  const { addToast } = useToast();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
@@ -32,12 +33,10 @@ export default function SignIn() {
     const registered = urlParams.get('registered');
 
     if (isLogout) {
-      setErrorMsg("");
       console.log("User logged out successfully");
     }
 
     if (fromSignup && registered) {
-      setErrorMsg("");
       console.log("Registration successful, please sign in");
     }
 
@@ -78,11 +77,26 @@ export default function SignIn() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMsg("");
 
     // Validate form data
     if (!formData.email || !formData.password) {
-      setErrorMsg("Please fill in all fields.");
+      addToast({
+        type: 'error',
+        title: 'Missing Information',
+        description: 'Please fill in all fields.',
+      });
+      setLoading(false);
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      addToast({
+        type: 'error',
+        title: 'Invalid Email',
+        description: 'Please enter a valid email address.',
+      });
       setLoading(false);
       return;
     }
@@ -91,7 +105,7 @@ export default function SignIn() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        "/api/auth/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -120,8 +134,20 @@ export default function SignIn() {
         console.log("Login successful for user:", response.data.user.names);
         console.log("User role:", response.data.user.role);
 
-        // Redirect based on role using utility
-        redirectToDashboard(router, response.data.user.role);
+        // Show success message
+        const userName = response.data.user.names || 'User';
+        const userRole = response.data.user.role;
+        addToast({
+          type: 'success',
+          title: 'Login Successful!',
+          description: `Welcome back ${userName}! Redirecting to your ${userRole.toLowerCase()} dashboard...`,
+          duration: 3000,
+        });
+
+        // Redirect based on role using utility after a short delay
+        setTimeout(() => {
+          redirectToDashboard(router, response.data.user.role);
+        }, 1500);
       } else {
         throw new Error(response.message || "Login failed");
       }
@@ -129,15 +155,37 @@ export default function SignIn() {
       console.error("Error signing in:", error);
 
       // Provide specific error messages
+      let errorTitle = "Login Failed";
+      let errorDescription = "Please try again.";
+      
       if (error.message.includes('401')) {
-        setErrorMsg("Invalid email or password. Please try again.");
+        errorTitle = "Invalid Credentials";
+        errorDescription = "Invalid email or password. Please try again.";
       } else if (error.message.includes('404')) {
-        setErrorMsg("Account not found. Please check your email or sign up.");
+        errorTitle = "Account Not Found";
+        errorDescription = "Account not found. Please check your email or sign up.";
+      } else if (error.message.includes('403')) {
+        errorTitle = "Account Disabled";
+        errorDescription = "Your account is disabled. Please contact support.";
+      } else if (error.message.includes('429')) {
+        errorTitle = "Too Many Attempts";
+        errorDescription = "Too many login attempts. Please try again later.";
+      } else if (error.message.includes('500')) {
+        errorTitle = "Server Error";
+        errorDescription = "Server error. Please try again later.";
       } else if (error.message.includes('Failed to fetch')) {
-        setErrorMsg("Network error. Please check your connection and try again.");
-      } else {
-        setErrorMsg(error.message || "Login failed. Please try again.");
+        errorTitle = "Network Error";
+        errorDescription = "Network error. Please check your connection and try again.";
+      } else if (error.message) {
+        errorDescription = error.message;
       }
+      
+      addToast({
+        type: 'error',
+        title: errorTitle,
+        description: errorDescription,
+        duration: 6000,
+      });
     } finally {
       setLoading(false);
     }
@@ -233,7 +281,6 @@ export default function SignIn() {
                 </div>
 
                 {/* Error */}
-                {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
 
                 {/* Submit */}
                 <Button

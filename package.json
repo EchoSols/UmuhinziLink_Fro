@@ -6,7 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "echo \"No tests specified\" && exit 0",
+    "audit:security": "npm audit --audit-level=moderate",
+    "ci": "npm run type-check && npm run lint && npm run build"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.7",
@@ -40,6 +47,7 @@
     "@types/react-dom": "^19.1.7",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
+    "prettier": "^3.2.5",
     "tailwindcss": "^4.1.11",
     "typescript": "^5"
   }

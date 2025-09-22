@@ -41,14 +41,16 @@ export async function POST(request: NextRequest) {
       },
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Login API error:', error);
+    
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     
     return NextResponse.json(
       { 
         success: false, 
         message: 'Internal server error',
-        error: error.message 
+        error: errorMessage 
       },
       { 
         status: 500,
@@ -63,7 +65,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Handle preflight OPTIONS request
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {

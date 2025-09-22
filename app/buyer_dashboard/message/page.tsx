@@ -9,9 +9,28 @@ const mockContacts = [
   { id: 4, name: "Urban Agro Store", role: "Supplier" },
 ];
 
+interface Message {
+  sender: string;
+  text: string;
+  time: string;
+}
+
+interface Conversation {
+  id: number;
+  name: string;
+  role: string;
+  messages: Message[];
+}
+
+interface Contact {
+  id: number;
+  name: string;
+  role: string;
+}
+
 export default function BuyerMessages() {
-  const [conversations, setConversations] = useState<any[]>([]);
-  const [activeChat, setActiveChat] = useState<any>(null);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeChat, setActiveChat] = useState<Conversation | null>(null);
   const [message, setMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -26,7 +45,7 @@ export default function BuyerMessages() {
   }, [conversations]);
 
   const sendMessage = () => {
-    if (!message.trim()) return;
+    if (!message.trim() || !activeChat) return;
     const updated = conversations.map((conv) =>
       conv.id === activeChat.id
         ? {
@@ -46,7 +65,7 @@ export default function BuyerMessages() {
     setMessage("");
   };
 
-  const startConversation = (contact: any) => {
+  const startConversation = (contact: Contact) => {
     const existing = conversations.find((c) => c.name === contact.name);
     if (existing) {
       setActiveChat(existing);
@@ -119,7 +138,7 @@ export default function BuyerMessages() {
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
-              {activeChat.messages.map((msg: any, i: number) => (
+              {activeChat.messages.map((msg: Message, i: number) => (
                 <div
                   key={i}
                   className={`flex ${

@@ -11,8 +11,7 @@ import {
   Settings,
   LogOut,
   CheckCircle,
-  User,
-  Package
+  User
 } from "lucide-react";
 
 const Logo = () => (

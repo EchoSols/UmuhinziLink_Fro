@@ -1,5 +1,4 @@
 "use client";
-import {Leaf} from "lucide-react";
 
 export default function Footer() {
   return (

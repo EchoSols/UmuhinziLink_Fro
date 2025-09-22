@@ -160,7 +160,7 @@ export default function FarmerMessages() {
                     }`}
                   >
                     {msg.text}
-                    <div className="text-[10px] mt-1 opacity-70">{msg.time}</div>
+                    <div className="text-[10px] mt-1 opacity-70">{msg.timestamp}</div>
                   </div>
                 </div>
               ))}

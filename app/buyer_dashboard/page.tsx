@@ -9,14 +9,12 @@ import {
   User,
   Phone,
   Settings,
-  LogOut,
-  Package,
-  Clock,
-  LayoutGrid,
+  LogOut,  
   FilePlus,
   TrendingUp,
   Users,
   Star,
+  LayoutGrid,
 } from "lucide-react";
 import Link from "next/link";
 import { Line } from "react-chartjs-2";

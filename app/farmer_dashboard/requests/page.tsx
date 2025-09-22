@@ -8,15 +8,12 @@ import {
   BarChart2,
   ShoppingCart,
   User,
-  Phone,
   Settings,
-  LogOut,
   Mail,
   Bell,
   Package,
   Leaf,
   ChevronDown,
-  Filter,
   X
 } from "lucide-react";
 import Link from "next/link";

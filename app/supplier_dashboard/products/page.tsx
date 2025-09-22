@@ -4,7 +4,6 @@ import {
   CheckCircle,
   LayoutGrid,
   FilePlus,
-  MessageSquare,
   ShoppingCart,
   User,
   Phone,

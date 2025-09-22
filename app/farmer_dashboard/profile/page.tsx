@@ -5,7 +5,6 @@ import {
   Phone,
   MapPin,
   Mail,
-  Leaf,
   Edit2,
   Save,
   X,

@@ -10,7 +10,6 @@ import {
   BarChart2,
   ShoppingCart,
   User,
-  Phone,
   Mail,
   Bell,
   Package,
@@ -184,7 +183,7 @@ export default function AiDashboard() {
                 
                 <div className="space-y-4 mb-4 max-h-64 overflow-y-auto">
                   <div className="text-sm text-gray-600">
-                    Hi! I'm your AI farming assistant. Ask me anything about farming, crops, or agricultural best practices.
+                    Hi! I&apos;m your AI farming assistant. Ask me anything about farming, crops, or agricultural best practices.
                   </div>
                   <div className="bg-gray-50 rounded-lg p-3">
                     <div className="text-xs text-gray-500 mb-1">You</div>

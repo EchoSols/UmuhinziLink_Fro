@@ -3,7 +3,6 @@
 import Link from "next/link";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home");

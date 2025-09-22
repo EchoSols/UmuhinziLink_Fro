@@ -11,8 +11,6 @@ import {
   CheckCircle,
   LayoutGrid,
   FilePlus,
-  MessageSquare,
-  BarChart2,
   ShoppingCart,
   Settings,
   LogOut,

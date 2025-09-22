@@ -1,10 +1,10 @@
 import React from 'react';
 import { 
-  CheckCircle, LayoutGrid, FilePlus, MessageSquare, BarChart2, ShoppingCart, 
-  User, Phone, Settings, LogOut, Mail, TrendingDown, Users, Package, TrendingUp,  
+  CheckCircle, LayoutGrid, FilePlus, ShoppingCart, 
+  User, Phone, Settings, LogOut, Mail, Users,
+  TrendingUp,  
 } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { SupplierGuard } from '@/components/auth/AuthGuard';
 
 const Logo = () => (

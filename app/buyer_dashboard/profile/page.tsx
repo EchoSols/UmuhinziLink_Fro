@@ -8,8 +8,6 @@ import {
   Edit2,
   Save,
   X,
-  LayoutGrid,
-  ShoppingCart,
   MessageSquare,
   Settings,
   LogOut,

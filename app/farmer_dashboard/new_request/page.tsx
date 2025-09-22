@@ -46,6 +46,7 @@ export default function NewRequest() {
       }
     } catch (err) {
       setErrorMsg("Error connecting to the server.");
+      console.error(err);
     } finally {
       setLoading(false);
     }

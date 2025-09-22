@@ -3,7 +3,7 @@
 import React from 'react';
 import {
   LayoutGrid, FilePlus, MessageSquare, BarChart2, ShoppingCart,
-  User, Phone, Settings, Mail, Bell, Package, Leaf, Download, Eye
+  User, Settings, Mail, Bell, Package, Leaf, Download
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

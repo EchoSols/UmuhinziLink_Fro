@@ -2,8 +2,6 @@
 import Link from "next/link";
 import {
   Mail,
-  Phone,
-  LayoutGrid,
   FilePlus,
   ShoppingCart,
   MessageSquare,
@@ -13,7 +11,6 @@ import {
   User,
   Bell,
   Lock,
-  Truck,
   Package
 } from "lucide-react";
 

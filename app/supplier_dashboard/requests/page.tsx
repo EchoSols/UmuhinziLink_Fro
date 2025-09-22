@@ -1,11 +1,10 @@
 "use client";
 import React from 'react';
 import { 
-  CheckCircle, LayoutGrid, FilePlus, MessageSquare, BarChart2, ShoppingCart, 
-  User, Phone, Settings, LogOut, Mail, Search, ChevronDown, Filter 
+  CheckCircle, LayoutGrid, FilePlus, ShoppingCart, 
+  User, Phone, Settings, LogOut, Mail, Search, Filter 
 } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 const Logo = () => (
   <div className="flex items-center gap-2">

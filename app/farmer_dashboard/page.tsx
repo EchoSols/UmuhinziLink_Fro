@@ -2,10 +2,10 @@
 
 import {
   LayoutGrid, FilePlus, BarChart2, MessageSquare,
-  ShoppingCart, User, Phone, Settings, LogOut, CloudSun, Mail, Leaf, Package, CheckCircle,
-  Search, Bell, ChevronDown, TrendingUp, Users, DollarSign, Activity
+  ShoppingCart, User, Settings, CloudSun, Mail, Leaf, Package,
+  Search, Bell, ChevronDown, TrendingUp, Users,
 } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area } from 'recharts';
+import { XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { FarmerGuard } from '@/components/auth/AuthGuard';

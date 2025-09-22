@@ -3,7 +3,8 @@
 
 import { usePathname } from 'next/navigation';
 import {
-  LayoutGrid, MessageSquare, Settings, LogOut, FilePlus, BarChart2, ShoppingCart, User, Phone, Mail, Bell, Package, Leaf, ChevronLeft, ChevronRight, Star
+  LayoutGrid, MessageSquare, Settings, FilePlus, BarChart2, ShoppingCart, User, Mail, Bell, Package, ChevronLeft, ChevronRight, Star,
+  Leaf
 } from 'lucide-react';
 import Link from 'next/link';
 

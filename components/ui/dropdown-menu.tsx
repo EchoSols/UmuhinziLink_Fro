@@ -36,7 +36,6 @@ const DropdownMenuContent = React.forwardRef<
     forceMount?: boolean
   }
 >(({ className, align = "center", children, ...props }, ref) => {
-  const [isOpen, setIsOpen] = React.useState(false)
   
   const alignClass = {
     start: "left-0",

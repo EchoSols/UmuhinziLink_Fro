@@ -3,12 +3,14 @@
 import {
   LayoutGrid, FilePlus, BarChart2, MessageSquare,
   ShoppingCart, User, Settings, CloudSun, Mail, Leaf, Package,
-  Search, Bell, ChevronDown, TrendingUp, Users,
+  Search, Bell, ChevronDown, TrendingUp, Users, LogOut,
 } from 'lucide-react';
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { FarmerGuard } from '@/components/auth/AuthGuard';
+import { logout } from '@/lib/auth';
 
 //menu items
 const menuItems = [
@@ -22,6 +24,7 @@ const menuItems = [
   { label: 'Profile', href: '/farmer_dashboard/profile', icon: User },
   { label: 'Orders', href: '/farmer_dashboard/orders', icon: ShoppingCart },
   { label: 'Settings', href: '/farmer_dashboard/settings', icon: Settings },
+  { label: 'Logout', href: '#', icon: LogOut, isLogout: true },
 ];
 
 //chart data
@@ -41,6 +44,12 @@ const chartData = [
 ];
 
 function Dashboard() {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout(router);
+  };
+
   const Logo = () => (
     <div className="flex items-center px-6 py-4">
       <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center mr-3">
@@ -71,21 +80,31 @@ function Dashboard() {
             {menuItems.map((item, index) => {
               const isActive = item.label === 'Dashboard';
               const Icon = item.icon;
-              const showDivider = index === 4 || index === 8;
+              const showDivider = index === 4 || index === 9;
               return (
                 <div key={item.label}>
-                  <Link href={item.href} className="block">
+                  {item.isLogout ? (
                     <div
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium
-                        ${isActive
-                          ? "bg-white text-green-600 shadow-sm rounded-lg"
-                          : "text-white"
-                        }`}
+                      onClick={handleLogout}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium text-white hover:bg-green-700`}
                     >
-                      <Icon className={`w-5 h-5 ${isActive ? "text-green-600" : "text-white"}`} />
+                      <Icon className="w-5 h-5 text-white" />
                       <span>{item.label}</span>
                     </div>
-                  </Link>
+                  ) : (
+                    <Link href={item.href} className="block">
+                      <div
+                        className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium
+                          ${isActive
+                            ? "bg-white text-green-600 shadow-sm rounded-lg"
+                            : "text-white hover:bg-green-700"
+                          }`}
+                      >
+                        <Icon className={`w-5 h-5 ${isActive ? "text-green-600" : "text-white"}`} />
+                        <span>{item.label}</span>
+                      </div>
+                    </Link>
+                  )}
                   {showDivider && <div className="border-t border-gray-200 my-2 mx-4"></div>}
                 </div>
               );

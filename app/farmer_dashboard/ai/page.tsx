@@ -14,10 +14,12 @@ import {
   Bell,
   Package,
   Leaf,
-  Send
+  Send,
+  LogOut
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { logout } from '@/lib/auth';
 
 const menuItems = [
   { label: "Dashboard", href: "/farmer_dashboard", icon: LayoutGrid },
@@ -30,6 +32,7 @@ const menuItems = [
   { label: "Profile", href: "/farmer_dashboard/profile", icon: User },
   { label: "Orders", href: "/farmer_dashboard/orders", icon: ShoppingCart },
   { label: "Settings", href: "/farmer_dashboard/settings", icon: Settings },
+  { label: "Logout", href: "#", icon: LogOut, isLogout: true },
 ];
 
 const tips = [
@@ -76,6 +79,11 @@ const Logo = () => (
 
 export default function AiDashboard() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout(router);
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -86,21 +94,31 @@ export default function AiDashboard() {
           {menuItems.map((item, index) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
-            const showDivider = index === 4 || index === 8;
+            const showDivider = index === 4 || index === 9;
             return (
               <div key={item.label}>
-                <Link href={item.href} className="block">
+                {item.isLogout ? (
                   <div
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium
-                      ${isActive
-                        ? "bg-white text-green-600 shadow-sm rounded-lg"
-                        : "text-white"
-                      }`}
+                    onClick={handleLogout}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium text-white hover:bg-green-700`}
                   >
-                    <Icon className={`w-5 h-5 ${isActive ? "text-green-600" : "text-white"}`} />
+                    <Icon className="w-5 h-5 text-white" />
                     <span>{item.label}</span>
                   </div>
-                </Link>
+                ) : (
+                  <Link href={item.href} className="block">
+                    <div
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium
+                        ${isActive
+                          ? "bg-white text-green-600 shadow-sm rounded-lg"
+                          : "text-white hover:bg-green-700"
+                        }`}
+                    >
+                      <Icon className={`w-5 h-5 ${isActive ? "text-green-600" : "text-white"}`} />
+                      <span>{item.label}</span>
+                    </div>
+                  </Link>
+                )}
                 {showDivider && <div className="border-t border-gray-200 my-2 mx-4"></div>}
               </div>
             );

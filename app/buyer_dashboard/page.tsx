@@ -17,8 +17,10 @@ import {
   LayoutGrid,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Line } from "react-chartjs-2";
 import { BuyerGuard } from '@/components/auth/AuthGuard';
+import { logout } from '@/lib/auth';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -42,7 +44,7 @@ const menuItems = [
   { label: "Profile", href: "/buyer_dashboard/profile", icon: User },
   { label: "Contact", href: "/buyer_dashboard/contact", icon: Phone },
   { label: "Settings", href: "/buyer_dashboard/settings", icon: Settings },
-  { label: "Logout", href: "/logout", icon: LogOut },
+  { label: "Logout", href: "#", icon: LogOut, isLogout: true },
 ];
 
 const stats = [
@@ -75,6 +77,12 @@ const Logo = () => (
 );
 
 function BuyerDashboard() {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout(router);
+  };
+
   const chartData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [
@@ -111,23 +119,33 @@ function BuyerDashboard() {
               const showDivider = index === 4 || index === 8;
               return (
                 <div key={item.label}>
-                  <Link href={item.href} className="block">
+                  {item.isLogout ? (
                     <div
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium
-                        ${
-                          isActive
-                            ? "bg-white text-green-600 shadow-sm"
-                            : "text-white hover:bg-green-700"
-                        }`}
+                      onClick={handleLogout}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium text-white hover:bg-green-700`}
                     >
-                      <Icon
-                        className={`w-5 h-5 ${
-                          isActive ? "text-green-600" : "text-white"
-                        }`}
-                      />
+                      <Icon className="w-5 h-5 text-white" />
                       <span>{item.label}</span>
                     </div>
-                  </Link>
+                  ) : (
+                    <Link href={item.href} className="block">
+                      <div
+                        className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium
+                          ${
+                            isActive
+                              ? "bg-white text-green-600 shadow-sm"
+                              : "text-white hover:bg-green-700"
+                          }`}
+                      >
+                        <Icon
+                          className={`w-5 h-5 ${
+                            isActive ? "text-green-600" : "text-white"
+                          }`}
+                        />
+                        <span>{item.label}</span>
+                      </div>
+                    </Link>
+                  )}
                   {showDivider && <div className="border-t border-green-500 my-2 mx-4"></div>}
                 </div>
               );

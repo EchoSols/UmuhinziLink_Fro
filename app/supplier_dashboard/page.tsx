@@ -12,12 +12,9 @@ import { SupplierGuard } from '@/components/auth/AuthGuard';
 import { logout } from '@/lib/auth';
 
 const Logo = () => (
-  <div className="flex items-center gap-2">
-    <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-      <span className="text-white font-bold text-sm">F</span>
-    </div>
+  <div className="flex items-center gap-2">    
     <span className="font-extrabold text-xl tracking-tight">
-      <span className="text-green-700">Farm</span><span className="text-black">Link</span>
+      <span className="text-green-700">Umuhinzi</span><span className="text-gray-700">Link</span>
     </span>
   </div>
 );

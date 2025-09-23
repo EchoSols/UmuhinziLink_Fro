@@ -1,18 +1,19 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   CheckCircle, LayoutGrid, FilePlus, ShoppingCart, 
-  User, Phone, Settings, LogOut, Mail, Search
+  User, Phone, Settings, LogOut, Mail, Search, ChevronDown, MoreVertical, Eye, Edit, Trash2
 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { SupplierGuard } from '@/components/auth/AuthGuard';
+import { logout } from '@/lib/auth';
+import { Input } from '@/components/ui/input';
 
 const Logo = () => (
-  <div className="flex items-center gap-2">
-    <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-      <span className="text-white font-bold text-sm">F</span>
-    </div>
+  <div className="flex items-center gap-2 py-2">
     <span className="font-extrabold text-xl tracking-tight">
-      <span className="text-green-700">Farm</span><span className="text-black">Link</span>
+      <span className="text-white">Umuhinzi</span><span className="text-white">Link</span>
     </span>
   </div>
 );
@@ -21,65 +22,226 @@ const menuItems = [
   { label: 'Dashboard', href: '/supplier_dashboard', icon: CheckCircle },
   { label: 'My Inputs', href: '/supplier_dashboard/products', icon: LayoutGrid },
   { label: 'Farmer Request', href: '/supplier_dashboard/requests', icon: FilePlus },
-  { label: 'Orders', href: '/supplier_dashboard/orders',icon: ShoppingCart },
-  { label: 'Message', href: '/messages', icon: Mail },
-  { label: 'Profile', href: '/profile', icon: User },
-  { label: 'Contact', href: '/contact', icon: Phone },
-  { label: 'Settings', href: '/settings', icon: Settings },
-  { label: 'Logout', href: '/logout', icon: LogOut },
+  { label: 'Orders', href: '/supplier_dashboard/orders', icon: ShoppingCart },
+  { label: 'Message', href: '/supplier_dashboard/message', icon: Mail },
+  { label: 'Profile', href: '/supplier_dashboard/profile', icon: User },
+  { label: 'Contact', href: '/supplier_dashboard/contact', icon: Phone },
+  { label: 'Settings', href: '/supplier_dashboard/settings', icon: Settings },
+  { label: 'Logout', href: '#', icon: LogOut, isLogout: true },
 ];
 
 
 
-export default function OrdersPage() {
+function OrdersPage() {
+  const router = useRouter();
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [openActionDropdown, setOpenActionDropdown] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const languages = [
+    { code: 'en', name: 'English', flag: '🇺🇸' },
+    { code: 'rw', name: 'Kinyarwanda', flag: '🇷🇼' },
+    { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  ];
+
+  const handleLogout = () => {
+    logout(router);
+  };
+
+  // Orders data
+  const ordersData = [
+    {
+      id: "#001",
+      customer: "John Doe",
+      address: "123 Main St, Kigali",
+      date: "Jan 15, 2024",
+      product: "NPK Fertilizer (50kg)",
+      amount: "$125.00",
+      status: "Delivered",
+      statusColor: "green"
+    },
+    {
+      id: "#002",
+      customer: "Jane Smith",
+      address: "456 Oak Ave, Kigali",
+      date: "Jan 14, 2024",
+      product: "Corn Seeds (25kg)",
+      amount: "$87.50",
+      status: "Pending",
+      statusColor: "yellow"
+    },
+    {
+      id: "#003",
+      customer: "Michael Brown",
+      address: "789 Pine Rd, Kigali",
+      date: "Jan 13, 2024",
+      product: "Organic Pesticide (10L)",
+      amount: "$65.00",
+      status: "Processing",
+      statusColor: "blue"
+    },
+    {
+      id: "#004",
+      customer: "Sarah Wilson",
+      address: "321 Elm St, Kigali",
+      date: "Jan 12, 2024",
+      product: "Wheat Seeds (75kg)",
+      amount: "$195.00",
+      status: "Delivered",
+      statusColor: "green"
+    },
+    {
+      id: "#005",
+      customer: "David Johnson",
+      address: "654 Maple Dr, Kigali",
+      date: "Jan 11, 2024",
+      product: "Tomato Seeds (5kg)",
+      amount: "$42.50",
+      status: "Pending",
+      statusColor: "yellow"
+    },
+    {
+      id: "#006",
+      customer: "Emily Davis",
+      address: "987 Cedar Ln, Kigali",
+      date: "Jan 10, 2024",
+      product: "Organic Fertilizer (100kg)",
+      amount: "$280.00",
+      status: "Delivered",
+      statusColor: "green"
+    },
+    {
+      id: "#007",
+      customer: "Robert Taylor",
+      address: "147 Birch St, Kigali",
+      date: "Jan 09, 2024",
+      product: "Rice Seeds (30kg)",
+      amount: "$96.00",
+      status: "Processing",
+      statusColor: "blue"
+    },
+    {
+      id: "#008",
+      customer: "Lisa Anderson",
+      address: "258 Spruce Ave, Kigali",
+      date: "Jan 08, 2024",
+      product: "Fungicide (15L)",
+      amount: "$78.00",
+      status: "Pending",
+      statusColor: "yellow"
+    },
+    {
+      id: "#009",
+      customer: "Mark Thompson",
+      address: "369 Willow Rd, Kigali",
+      date: "Jan 07, 2024",
+      product: "Herbicide (20L)",
+      amount: "$156.00",
+      status: "Delivered",
+      statusColor: "green"
+    },
+    {
+      id: "#010",
+      customer: "Anna Martinez",
+      address: "741 Poplar St, Kigali",
+      date: "Jan 06, 2024",
+      product: "Bean Seeds (40kg)",
+      amount: "$112.00",
+      status: "Processing",
+      statusColor: "blue"
+    }
+  ];
+
+  // Helper function to get status styling
+  const getStatusStyle = (statusColor: string) => {
+    switch (statusColor) {
+      case 'green':
+        return 'bg-green-100 text-green-800';
+      case 'yellow':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'blue':
+        return 'bg-blue-100 text-blue-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  // Action handlers
+  const handleViewOrder = (orderId: string) => {
+    console.log('Viewing order:', orderId);
+    setOpenActionDropdown(null);
+    // Add your view logic here
+  };
+
+  const handleEditOrder = (orderId: string) => {
+    console.log('Editing order:', orderId);
+    setOpenActionDropdown(null);
+    // Add your edit logic here
+  };
+
+  const handleDeleteOrder = (orderId: string) => {
+    console.log('Deleting order:', orderId);
+    setOpenActionDropdown(null);
+    // Add your delete logic here
+    if (confirm('Are you sure you want to delete this order?')) {
+      // Perform delete action
+    }
+  };
+
+  const toggleActionDropdown = (orderId: string) => {
+    setOpenActionDropdown(openActionDropdown === orderId ? null : orderId);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenActionDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="sticky top-0 z-30 bg-white border-b h-16 flex items-center justify-between px-8 shadow-sm">
-        <Logo />
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 text-sm">
-            <div className="w-5 h-4 bg-blue-600 rounded-sm flex items-center justify-center">
-              <div className="w-3 h-2 bg-yellow-400 rounded-sm"></div>
-            </div>
-            <span>English</span>
-          </div>
-          <button className="bg-orange-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors cursor-pointer">
-            Export
-          </button>
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-              <User className="w-4 h-4 text-gray-600" />
-            </div>
-            <div className="text-sm">
-              <p className="font-medium text-gray-900">Agri Sup</p>
-            </div>
-          </div>
-        </div>
-      </header>
-      
       <div className="flex flex-1 min-h-0">
         {/* Sidebar */}
-        <aside className="w-64 bg-green-600 flex flex-col fixed left-0 top-16 h-[calc(100vh-4rem)] overflow-y-auto">
+        <aside className="w-64 bg-green-600 flex flex-col fixed left-0 h-screen overflow-y-auto">
           <nav className="flex-1 px-4 py-6 space-y-1">
+            <Logo />
             {menuItems.map((item, index) => {
               const isActive = item.label === 'Orders';
               const Icon = item.icon;
-              const showDivider = index === 3 || index === 7; 
+              const showDivider = index === 3 || index === 7;
               return (
                 <div key={item.label}>
-                  <Link href={item.href} className="block">
+                  {item.isLogout ? (
                     <div
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all text-sm font-medium
-                        ${isActive
-                          ? "bg-white text-green-600 shadow-sm"
-                          : "text-white hover:bg-green-700"
-                        }`}
+                      onClick={handleLogout}
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all text-sm font-medium text-white hover:bg-green-700`}
                     >
-                      <Icon className={`w-4 h-4 ${isActive ? "text-green-600" : "text-white"}`} />
+                      <Icon className="w-4 h-4 text-white" />
                       <span>{item.label}</span>
                     </div>
-                  </Link>
+                  ) : (
+                    <Link href={item.href} className="block">
+                      <div
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all text-sm font-medium
+                          ${isActive
+                            ? "bg-white text-green-600 shadow-sm"
+                            : "text-white hover:bg-green-700"
+                          }`}
+                      >
+                        <Icon className={`w-4 h-4 ${isActive ? "text-green-600" : "text-white"}`} />
+                        <span>{item.label}</span>
+                      </div>
+                    </Link>
+                  )}
                   {showDivider && <div className="border-t border-green-500 my-2 mx-3"></div>}
                 </div>
               );
@@ -88,7 +250,30 @@ export default function OrdersPage() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6 overflow-auto ml-64">
+        <main className="flex-1 p-6 overflow-auto ml-64 relative">
+          {/* Header */}
+          <header className="fixed top-0 left-64 z-30 right-0 bg-white border-b h-16 flex items-center justify-between px-8 shadow-sm">
+            {/* Search Section */}
+            <div className='w-1/2 relative'>
+              <Input
+                type='text'
+                placeholder='Search...'
+                className='pl-4 pr-10 h-10 border-gray-300 focus:border-green-500 focus:ring-green-500 rounded-3xl'
+              />
+              <Search size={18} className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400' />
+            </div>
+            
+            {/* Right Section */}
+            <div className="flex items-center gap-6">
+              {/* Export Button */}
+              <button className="bg-orange-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors cursor-pointer">
+                Export
+              </button>
+            </div>
+          </header>
+          
+          {/* Content with top margin for fixed header */}
+          <div className='mt-16'>
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-xl font-semibold text-gray-900">Order</h1>
@@ -135,134 +320,58 @@ export default function OrdersPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-4 px-4 font-medium text-gray-900">#001</td>
-                    <td className="py-4 px-4 text-gray-900">John Doe</td>
-                    <td className="py-4 px-4 text-gray-900">123 Main St, Kigali</td>
-                    <td className="py-4 px-4 text-gray-900">Jan 15, 2024</td>
-                    <td className="py-4 px-4 text-gray-900">NPK Fertilizer (50kg)</td>
-                    <td className="py-4 px-4 text-gray-900">$125.00</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Delivered</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <button className="text-gray-400 hover:text-gray-600 cursor-pointer">
-                        <span className="text-lg">⋯</span>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-4 px-4 font-medium text-gray-900">#002</td>
-                    <td className="py-4 px-4 text-gray-900">Jane Smith</td>
-                    <td className="py-4 px-4 text-gray-900">456 Oak Ave, Kigali</td>
-                    <td className="py-4 px-4 text-gray-900">Jan 14, 2024</td>
-                    <td className="py-4 px-4 text-gray-900">Corn Seeds (25kg)</td>
-                    <td className="py-4 px-4 text-gray-900">$87.50</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Pending</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <button className="text-gray-400 hover:text-gray-600 cursor-pointer">
-                        <span className="text-lg">⋯</span>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-4 px-4 font-medium text-gray-900">#003</td>
-                    <td className="py-4 px-4 text-gray-900">Michael Brown</td>
-                    <td className="py-4 px-4 text-gray-900">789 Pine Rd, Kigali</td>
-                    <td className="py-4 px-4 text-gray-900">Jan 13, 2024</td>
-                    <td className="py-4 px-4 text-gray-900">Organic Pesticide (10L)</td>
-                    <td className="py-4 px-4 text-gray-900">$65.00</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Processing</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <button className="text-gray-400 hover:text-gray-600 cursor-pointer">
-                        <span className="text-lg">⋯</span>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-4 px-4 font-medium text-gray-900">#004</td>
-                    <td className="py-4 px-4 text-gray-900">Sarah Wilson</td>
-                    <td className="py-4 px-4 text-gray-900">321 Elm St, Kigali</td>
-                    <td className="py-4 px-4 text-gray-900">Jan 12, 2024</td>
-                    <td className="py-4 px-4 text-gray-900">Wheat Seeds (75kg)</td>
-                    <td className="py-4 px-4 text-gray-900">$195.00</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Delivered</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <button className="text-gray-400 hover:text-gray-600 cursor-pointer">
-                        <span className="text-lg">⋯</span>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-4 px-4 font-medium text-gray-900">#005</td>
-                    <td className="py-4 px-4 text-gray-900">David Johnson</td>
-                    <td className="py-4 px-4 text-gray-900">654 Maple Dr, Kigali</td>
-                    <td className="py-4 px-4 text-gray-900">Jan 11, 2024</td>
-                    <td className="py-4 px-4 text-gray-900">Tomato Seeds (5kg)</td>
-                    <td className="py-4 px-4 text-gray-900">$42.50</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Pending</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <button className="text-gray-400 hover:text-gray-600 cursor-pointer">
-                        <span className="text-lg">⋯</span>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-4 px-4 font-medium text-gray-900">#006</td>
-                    <td className="py-4 px-4 text-gray-900">Emily Davis</td>
-                    <td className="py-4 px-4 text-gray-900">987 Cedar Ln, Kigali</td>
-                    <td className="py-4 px-4 text-gray-900">Jan 10, 2024</td>
-                    <td className="py-4 px-4 text-gray-900">Organic Fertilizer (100kg)</td>
-                    <td className="py-4 px-4 text-gray-900">$280.00</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Delivered</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <button className="text-gray-400 hover:text-gray-600 cursor-pointer">
-                        <span className="text-lg">⋯</span>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-4 px-4 font-medium text-gray-900">#007</td>
-                    <td className="py-4 px-4 text-gray-900">Robert Taylor</td>
-                    <td className="py-4 px-4 text-gray-900">147 Birch St, Kigali</td>
-                    <td className="py-4 px-4 text-gray-900">Jan 09, 2024</td>
-                    <td className="py-4 px-4 text-gray-900">Rice Seeds (30kg)</td>
-                    <td className="py-4 px-4 text-gray-900">$96.00</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Processing</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <button className="text-gray-400 hover:text-gray-600 cursor-pointer">
-                        <span className="text-lg">⋯</span>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-4 px-4 font-medium text-gray-900">#008</td>
-                    <td className="py-4 px-4 text-gray-900">Lisa Anderson</td>
-                    <td className="py-4 px-4 text-gray-900">258 Spruce Ave, Kigali</td>
-                    <td className="py-4 px-4 text-gray-900">Jan 08, 2024</td>
-                    <td className="py-4 px-4 text-gray-900">Fungicide (15L)</td>
-                    <td className="py-4 px-4 text-gray-900">$78.00</td>
-                    <td className="py-4 px-4">
-                      <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Pending</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <button className="text-gray-400 hover:text-gray-600 cursor-pointer">
-                        <span className="text-lg">⋯</span>
-                      </button>
-                    </td>
-                  </tr>
+                  {ordersData.map((order, index) => (
+                    <tr key={order.id} className={index < ordersData.length - 1 ? "border-b border-gray-100" : ""}>
+                      <td className="py-3 px-4 font-medium text-gray-900 text-sm">{order.id}</td>
+                      <td className="py-3 px-4 text-gray-900 text-sm">{order.customer}</td>
+                      <td className="py-3 px-4 text-gray-500 text-sm">{order.address}</td>
+                      <td className="py-3 px-4 text-gray-900 text-sm">{order.date}</td>
+                      <td className="py-3 px-4 text-gray-900 text-sm">{order.product}</td>
+                      <td className="py-3 px-4 text-gray-900 text-sm font-medium">{order.amount}</td>
+                      <td className="py-3 px-4">
+                        <span className={`${getStatusStyle(order.statusColor)} px-2 py-1 rounded-full text-xs font-medium`}>
+                          {order.status}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 relative">
+                        <div className="flex justify-center" ref={dropdownRef}>
+                          <button 
+                            onClick={() => toggleActionDropdown(order.id)}
+                            className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors"
+                          >
+                            <MoreVertical size={16} />
+                          </button>
+                          
+                          {/* Action Dropdown */}
+                          {openActionDropdown === order.id && (
+                            <div className="absolute right-0 top-8 mt-1 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                              <button
+                                onClick={() => handleViewOrder(order.id)}
+                                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors text-left"
+                              >
+                                <Eye size={14} />
+                                View Details
+                              </button>
+                              <button
+                                onClick={() => handleEditOrder(order.id)}
+                                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors text-left"
+                              >
+                                <Edit size={14} />
+                                Edit Order
+                              </button>
+                              <button
+                                onClick={() => handleDeleteOrder(order.id)}
+                                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
+                              >
+                                <Trash2 size={14} />
+                                Delete Order
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -283,8 +392,17 @@ export default function OrdersPage() {
               </button>
             </div>
           </div>
+          </div>
         </main>
       </div>
     </div>
+  );
+}
+
+export default function OrdersPageWrapper() {
+  return (
+    <SupplierGuard>
+      <OrdersPage />
+    </SupplierGuard>
   );
 }

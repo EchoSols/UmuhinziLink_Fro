@@ -175,59 +175,50 @@ export default function SignUp() {
     try {
       // Use the Next.js API route to avoid CORS issues
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
+      const res = await fetch(`/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
-        credentials: 'include', // Important for cookies, authorization headers with credentials
-        mode: 'cors', // Enable CORS mode
         body: JSON.stringify(requestBody)
       });
 
+      const response = await res.json();
+
       if (!res.ok) {
-        let errorMessage = `Registration failed: ${res.status}`;
-        try {
-          const errorData = await res.json();
-          errorMessage = errorData.message || errorData.error || errorMessage;
-        } catch {
-          const errorText = await res.text();
-          errorMessage = errorText || errorMessage;
-        }
-        throw new Error(errorMessage);
+        throw new Error(response.message || `Registration failed: ${res.status}`);
       }
 
-      const response = await res.json();
       console.log("Account created successfully:", response);
 
-      // Validate response structure matches API specification
-      if (response.success && response.data && response.data.token && response.data.user) {
-        // Store the token and user data in localStorage for future use
+      // Store auth data immediately if available
+      if (response.success && response.data?.token) {
         localStorage.setItem('authToken', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        if (response.data.user) {
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+        }
 
-        // Show success message with user's name
-        const userName = response.data.user.names || 'User';
+        // Show success message
+        const userName = response.data.user?.names || 'User';
         addToast({
           type: 'success',
-          title: 'Account Created Successfully!',
-          description: `Welcome ${userName}! Your account has been created successfully.`,
-          duration: 4000,
+          title: 'Registration Successful',
+          description: `Welcome, ${userName}! You're being redirected...`,
+          duration: 3000,
         });
-
-        // Redirect to signin page with success indicator after a short delay
-        setTimeout(() => {
-          router.push("/signin?from=signup&registered=true");
-        }, 1500);
       } else {
-        throw new Error(response.message || "Invalid response format from server");
+        // If no token but registration was successful, redirect to login
+        addToast({
+          type: 'success',
+          title: 'Registration Successful',
+          description: 'Please log in with your new credentials.',
+          duration: 3000,
+        });
+        router.push('/signin');
       }
-
-    } catch (err: unknown) {
-      console.error("Signup failed:", err);
-
-      // Provide more specific error messages based on error type
+    } catch (err: any) {
+      // Error handling
       let errorTitle = "Registration Failed";
       let errorDescription = "Please try again.";
 

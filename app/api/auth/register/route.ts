@@ -24,6 +24,7 @@ export async function POST(request: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
         'Accept': '*/*',
+        'Origin': 'http://localhost:3000',
       },
       body: JSON.stringify(body),
     });

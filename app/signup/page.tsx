@@ -179,7 +179,10 @@ export default function SignUp() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept": "application/json"
         },
+        credentials: 'include', // Important for cookies, authorization headers with credentials
+        mode: 'cors', // Enable CORS mode
         body: JSON.stringify(requestBody)
       });
 

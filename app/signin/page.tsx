@@ -140,25 +140,23 @@ export default function SignIn() {
     console.log("Attempting login with:", { email: formData.email });
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password
-          }),
-        }
-      );
-
-      if (!res.ok) {
-        const errorData = await res.text();
-        throw new Error(`Login failed: ${res.status} - ${errorData}`);
-      }
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        }),
+      });
 
       const response: LoginResponse = await res.json();
       console.log("Login response:", response);
+
+      if (!res.ok) {
+        throw new Error(response.message || `Login failed: ${res.status}`);
+      }
 
       if (response.success && response.data) {
         // Store authentication data using utility

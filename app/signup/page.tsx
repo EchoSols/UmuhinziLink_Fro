@@ -31,6 +31,23 @@ export default function SignUp() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({
+    names: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    agreeToTerms: "",
+    role: ""
+  });
+  const [touched, setTouched] = useState({
+    names: false,
+    email: false,
+    phoneNumber: false,
+    password: false,
+    agreeToTerms: false,
+    role: false
+  });
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -38,67 +55,107 @@ export default function SignUp() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+    // Clear field error when user starts typing
+    if (fieldErrors[name as keyof typeof fieldErrors]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    validateField(name, formData[name as keyof typeof formData]);
+  };
+
+  const validateField = (name: string, value: any) => {
+    let error = "";
+
+    switch (name) {
+      case "names":
+        if (!value.trim()) {
+          error = "Full name is required";
+        } else if (value.trim().length < 2) {
+          error = "Name must be at least 2 characters long";
+        }
+        break;
+      case "email":
+        if (!value.trim()) {
+          error = "Email is required";
+        } else {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            error = "Please enter a valid email address";
+          }
+        }
+        break;
+      case "phoneNumber":
+        if (!value.trim()) {
+          error = "Phone number is required";
+        } else if (value.replace(/\D/g, '').length < 10) {
+          error = "Phone number must be at least 10 digits";
+        }
+        break;
+      case "password":
+        if (!value.trim()) {
+          error = "Password is required";
+        } else if (value.length < 6) {
+          error = "Password must be at least 6 characters long";
+        } else if (!/(?=.*[a-z])/.test(value)) {
+          error = "Password must contain at least one lowercase letter";
+        } else if (!/(?=.*\d)/.test(value)) {
+          error = "Password must contain at least one number";
+        }
+        break;
+      case "agreeToTerms":
+        if (!value) {
+          error = "You must agree to the terms and conditions";
+        }
+        break;
+      case "role":
+        if (!value) {
+          error = "Please select an account type";
+        }
+        break;
+    }
+
+    setFieldErrors((prev) => ({ ...prev, [name]: error }));
+    return error === "";
+  };
+
+  const validateForm = () => {
+    const namesValid = validateField("names", formData.names);
+    const emailValid = validateField("email", formData.email);
+    const phoneValid = validateField("phoneNumber", formData.phoneNumber);
+    const passwordValid = validateField("password", formData.password);
+    const termsValid = validateField("agreeToTerms", formData.agreeToTerms);
+    const roleValid = validateField("role", formData.role);
+
+    setTouched({
+      names: true,
+      email: true,
+      phoneNumber: true,
+      password: true,
+      agreeToTerms: true,
+      role: true
+    });
+
+    return namesValid && emailValid && phoneValid && passwordValid && termsValid && roleValid;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
-    // Validate required fields
-    if (!formData.names || !formData.email || !formData.phoneNumber || !formData.password) {
+    // Validate form data
+    if (!validateForm()) {
       addToast({
         type: 'error',
-        title: 'Missing Information',
-        description: 'Please fill in all required fields.',
+        title: 'Validation Error',
+        description: 'Please fix the errors below and try again.',
+        duration: 4000,
       });
-      return;
-    }
-
-    if (!formData.role) {
-      addToast({
-        type: 'error',
-        title: 'Account Type Required',
-        description: 'Please select an account type.',
-      });
-      return;
-    }
-
-    if (!formData.agreeToTerms) {
-      addToast({
-        type: 'error',
-        title: 'Terms & Conditions',
-        description: 'Please agree to the terms and conditions.',
-      });
-      return;
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      addToast({
-        type: 'error',
-        title: 'Invalid Email',
-        description: 'Please enter a valid email address.',
-      });
-      return;
-    }
-
-    // Validate phone number format (basic validation)
-    if (formData.phoneNumber.length < 10) {
-      addToast({
-        type: 'error',
-        title: 'Invalid Phone Number',
-        description: 'Please enter a valid phone number.',
-      });
-      return;
-    }
-
-    // Validate password length
-    if (formData.password.length < 6) {
-      addToast({
-        type: 'error',
-        title: 'Password Too Short',
-        description: 'Password must be at least 6 characters long.',
-      });
+      setLoading(false);
       return;
     }
 
@@ -117,9 +174,8 @@ export default function SignUp() {
 
     try {
       // Use the Next.js API route to avoid CORS issues
-      const apiUrl = "/api/auth/register";
 
-      const res = await fetch(apiUrl, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -147,7 +203,7 @@ export default function SignUp() {
         // Store the token and user data in localStorage for future use
         localStorage.setItem('authToken', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        
+
         // Show success message with user's name
         const userName = response.data.user.names || 'User';
         addToast({
@@ -156,7 +212,7 @@ export default function SignUp() {
           description: `Welcome ${userName}! Your account has been created successfully.`,
           duration: 4000,
         });
-        
+
         // Redirect to signin page with success indicator after a short delay
         setTimeout(() => {
           router.push("/signin?from=signup&registered=true");
@@ -171,34 +227,53 @@ export default function SignUp() {
       // Provide more specific error messages based on error type
       let errorTitle = "Registration Failed";
       let errorDescription = "Please try again.";
-      
+
       const errorMessage = err instanceof Error ? err.message : String(err);
-      
+
       if (errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError')) {
         errorTitle = "Network Error";
         errorDescription = "Unable to reach the registration server. Please check your connection and try again.";
       } else if (errorMessage.includes('400')) {
         errorTitle = "Invalid Data";
         errorDescription = "Please check your information and try again.";
-      } else if (errorMessage.includes('409')) {
+      } else if (errorMessage.includes('409') || errorMessage.toLowerCase().includes('already exists')) {
         errorTitle = "Account Already Exists";
         errorDescription = "An account with this email already exists. Please try signing in instead.";
+        setFieldErrors(prev => ({ ...prev, email: "Email already registered" }));
+        setTouched(prev => ({ ...prev, email: true }));
       } else if (errorMessage.includes('422')) {
         errorTitle = "Invalid Format";
         errorDescription = "Please check your information and try again.";
       } else if (errorMessage.includes('500')) {
         errorTitle = "Server Error";
-        errorDescription = "Please try again later.";
+        errorDescription = "Our servers are experiencing issues. Please try again in a few minutes.";
+      } else if (errorMessage.toLowerCase().includes('email')) {
+        errorTitle = "Email Error";
+        errorDescription = errorMessage;
+        setFieldErrors(prev => ({ ...prev, email: errorMessage }));
+        setTouched(prev => ({ ...prev, email: true }));
+      } else if (errorMessage.toLowerCase().includes('password')) {
+        errorTitle = "Password Error";
+        errorDescription = errorMessage;
+        setFieldErrors(prev => ({ ...prev, password: errorMessage }));
+        setTouched(prev => ({ ...prev, password: true }));
+      } else if (errorMessage.toLowerCase().includes('phone')) {
+        errorTitle = "Phone Number Error";
+        errorDescription = errorMessage;
+        setFieldErrors(prev => ({ ...prev, phoneNumber: errorMessage }));
+        setTouched(prev => ({ ...prev, phoneNumber: true }));
       } else if (errorMessage) {
         errorDescription = errorMessage;
       }
-      
+
       addToast({
         type: 'error',
         title: errorTitle,
         description: errorDescription,
         duration: 6000,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -281,9 +356,20 @@ export default function SignUp() {
               placeholder="John Doe"
               value={formData.names}
               onChange={handleInputChange}
-              className="text-gray-700 font-medium text-sm border border-gray-300"
+              onBlur={handleBlur}
+              disabled={loading}
+              className={`text-gray-700 font-medium text-sm border ${touched.names && fieldErrors.names
+                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                : "border-gray-300 focus:border-green-500 focus:ring-green-500"
+                }`}
               required
             />
+            {touched.names && fieldErrors.names && (
+              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+                {fieldErrors.names}
+              </p>
+            )}
           </div>
 
           <div>
@@ -297,9 +383,20 @@ export default function SignUp() {
               placeholder="you@example.com"
               value={formData.email}
               onChange={handleInputChange}
-              className="text-gray-700 font-medium text-sm border border-gray-300"
+              onBlur={handleBlur}
+              disabled={loading}
+              className={`text-gray-700 font-medium text-sm border ${touched.email && fieldErrors.email
+                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                : "border-gray-300 focus:border-green-500 focus:ring-green-500"
+                }`}
               required
             />
+            {touched.email && fieldErrors.email && (
+              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+                {fieldErrors.email}
+              </p>
+            )}
           </div>
 
           <div>
@@ -313,9 +410,20 @@ export default function SignUp() {
               placeholder="+250 7..."
               value={formData.phoneNumber}
               onChange={handleInputChange}
-              className="text-gray-700 font-medium text-sm border border-gray-300"
+              onBlur={handleBlur}
+              disabled={loading}
+              className={`text-gray-700 font-medium text-sm border ${touched.phoneNumber && fieldErrors.phoneNumber
+                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                : "border-gray-300 focus:border-green-500 focus:ring-green-500"
+                }`}
               required
             />
+            {touched.phoneNumber && fieldErrors.phoneNumber && (
+              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+                {fieldErrors.phoneNumber}
+              </p>
+            )}
           </div>
 
           <div>
@@ -350,7 +458,12 @@ export default function SignUp() {
               placeholder="••••••••"
               value={formData.password}
               onChange={handleInputChange}
-              className="text-gray-700 font-medium text-sm border border-gray-300 pr-10"
+              onBlur={handleBlur}
+              disabled={loading}
+              className={`text-gray-700 font-medium text-sm border pr-10 ${touched.password && fieldErrors.password
+                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                : "border-gray-300 focus:border-green-500 focus:ring-green-500"
+                }`}
               required
             />
             <button
@@ -360,6 +473,12 @@ export default function SignUp() {
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
+            {touched.password && fieldErrors.password && (
+              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+                {fieldErrors.password}
+              </p>
+            )}
           </div>
 
           {/* Agree Terms */}
@@ -380,8 +499,9 @@ export default function SignUp() {
           <Button
             type="submit"
             className="w-full bg-green-600 hover:bg-green-700 text-white font-medium text-sm"
+            disabled={loading}
           >
-            Sign Up
+            {loading ? "Creating Account..." : "Sign Up"}
           </Button>
 
           <p className="text-gray-700 text-sm text-center">

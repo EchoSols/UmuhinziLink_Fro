@@ -24,6 +24,8 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [fieldErrors, setFieldErrors] = useState({ email: "", password: "" });
+  const [touched, setTouched] = useState({ email: false, password: false });
 
   // Check if user is already authenticated and handle URL parameters
   useEffect(() => {
@@ -62,6 +64,51 @@ export default function SignIn() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Clear field error when user starts typing
+    if (fieldErrors[name as keyof typeof fieldErrors]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    validateField(name, formData[name as keyof typeof formData]);
+  };
+
+  const validateField = (name: string, value: string) => {
+    let error = "";
+
+    switch (name) {
+      case "email":
+        if (!value.trim()) {
+          error = "Email is required";
+        } else {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            error = "Please enter a valid email address";
+          }
+        }
+        break;
+      case "password":
+        if (!value.trim()) {
+          error = "Password is required";
+        } else if (value.length < 6) {
+          error = "Password must be at least 6 characters long";
+        }
+        break;
+    }
+
+    setFieldErrors((prev) => ({ ...prev, [name]: error }));
+    return error === "";
+  };
+
+  const validateForm = () => {
+    const emailValid = validateField("email", formData.email);
+    const passwordValid = validateField("password", formData.password);
+    setTouched({ email: true, password: true });
+    return emailValid && passwordValid;
   };
 
   const handleRememberMe = (email: string) => {
@@ -79,23 +126,12 @@ export default function SignIn() {
     setLoading(true);
 
     // Validate form data
-    if (!formData.email || !formData.password) {
+    if (!validateForm()) {
       addToast({
         type: 'error',
-        title: 'Missing Information',
-        description: 'Please fill in all fields.',
-      });
-      setLoading(false);
-      return;
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      addToast({
-        type: 'error',
-        title: 'Invalid Email',
-        description: 'Please enter a valid email address.',
+        title: 'Validation Error',
+        description: 'Please fix the errors below and try again.',
+        duration: 4000,
       });
       setLoading(false);
       return;
@@ -105,7 +141,7 @@ export default function SignIn() {
 
     try {
       const res = await fetch(
-        "/api/auth/login",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -157,31 +193,46 @@ export default function SignIn() {
       // Provide specific error messages
       let errorTitle = "Login Failed";
       let errorDescription = "Please try again.";
-      
+
       const errorMessage = error instanceof Error ? error.message : String(error);
-      
+
       if (errorMessage.includes('401')) {
         errorTitle = "Invalid Credentials";
-        errorDescription = "Invalid email or password. Please try again.";
+        errorDescription = "The email or password you entered is incorrect. Please check your credentials and try again.";
+        // Highlight password field for wrong credentials
+        setFieldErrors(prev => ({ ...prev, password: "Invalid email or password" }));
+        setTouched({ email: true, password: true });
       } else if (errorMessage.includes('404')) {
         errorTitle = "Account Not Found";
-        errorDescription = "Account not found. Please check your email or sign up.";
+        errorDescription = "No account found with this email address. Please check your email or create a new account.";
+        setFieldErrors(prev => ({ ...prev, email: "Account not found" }));
+        setTouched({ email: true, password: true });
       } else if (errorMessage.includes('403')) {
         errorTitle = "Account Disabled";
-        errorDescription = "Your account is disabled. Please contact support.";
+        errorDescription = "Your account has been disabled. Please contact support for assistance.";
       } else if (errorMessage.includes('429')) {
         errorTitle = "Too Many Attempts";
-        errorDescription = "Too many login attempts. Please try again later.";
+        errorDescription = "Too many login attempts. Please wait a few minutes before trying again.";
       } else if (errorMessage.includes('500')) {
         errorTitle = "Server Error";
-        errorDescription = "Server error. Please try again later.";
+        errorDescription = "Our servers are experiencing issues. Please try again in a few minutes.";
       } else if (errorMessage.includes('Failed to fetch')) {
-        errorTitle = "Network Error";
-        errorDescription = "Network error. Please check your connection and try again.";
+        errorTitle = "Connection Error";
+        errorDescription = "Unable to connect to our servers. Please check your internet connection and try again.";
+      } else if (errorMessage.toLowerCase().includes('password')) {
+        errorTitle = "Password Error";
+        errorDescription = errorMessage;
+        setFieldErrors(prev => ({ ...prev, password: errorMessage }));
+        setTouched({ email: true, password: true });
+      } else if (errorMessage.toLowerCase().includes('email')) {
+        errorTitle = "Email Error";
+        errorDescription = errorMessage;
+        setFieldErrors(prev => ({ ...prev, email: errorMessage }));
+        setTouched({ email: true, password: true });
       } else if (errorMessage) {
         errorDescription = errorMessage;
       }
-      
+
       addToast({
         type: 'error',
         title: errorTitle,
@@ -236,10 +287,20 @@ export default function SignIn() {
                     placeholder="Your email"
                     value={formData.email}
                     onChange={handleInputChange}
+                    onBlur={handleBlur}
                     disabled={loading}
                     required
-                    className="text-gray-700 text-sm font-medium outline-gray-200 rounded-xl"
+                    className={`text-gray-700 text-sm font-medium outline-gray-200 rounded-xl ${touched.email && fieldErrors.email
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:border-green-500 focus:ring-green-500"
+                      }`}
                   />
+                  {touched.email && fieldErrors.email && (
+                    <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                      <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+                      {fieldErrors.email}
+                    </p>
+                  )}
                 </div>
 
                 {/* Password */}
@@ -255,9 +316,13 @@ export default function SignIn() {
                       placeholder="Your password"
                       value={formData.password}
                       onChange={handleInputChange}
+                      onBlur={handleBlur}
                       disabled={loading}
                       required
-                      className="text-gray-700 text-sm font-medium outline-gray-200 pr-10 rounded-xl"
+                      className={`text-gray-700 text-sm font-medium outline-gray-200 pr-10 rounded-xl ${touched.password && fieldErrors.password
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                        : "border-gray-300 focus:border-green-500 focus:ring-green-500"
+                        }`}
                     />
                     <button
                       type="button"
@@ -267,6 +332,12 @@ export default function SignIn() {
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   </div>
+                  {touched.password && fieldErrors.password && (
+                    <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                      <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+                      {fieldErrors.password}
+                    </p>
+                  )}
                 </div>
 
                 {/* Remember Me */}

@@ -4,21 +4,21 @@ export async function POST(request: NextRequest) {
   try {
     // Get the request body
     const body = await request.json();
-    
+
     // Validate required fields
     if (!body.email || !body.password) {
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Email and password are required' 
+        {
+          success: false,
+          message: 'Email and password are required'
         },
         { status: 400 }
       );
     }
 
     // Make the request to the actual API server
-    const apiUrl = 'http://13.222.250.16:8081/api/v1/auth/login';
-    
+    const apiUrl = 'https://umuhinzi-api.echo-solution.com/api/v1/auth/login';
+
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -43,16 +43,16 @@ export async function POST(request: NextRequest) {
 
   } catch (error: unknown) {
     console.error('Login API error:', error);
-    
+
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         message: 'Internal server error',
-        error: errorMessage 
+        error: errorMessage
       },
-      { 
+      {
         status: 500,
         headers: {
           'Access-Control-Allow-Origin': '*',

@@ -56,7 +56,7 @@ function Dashboard() {
         <Leaf className="w-5 h-5 text-green-600" />
       </div>
       <span className="font-bold text-xl text-white">
-        FarmLink
+        UmuhinziLink
       </span>
     </div>
   );
@@ -118,10 +118,10 @@ function Dashboard() {
             <div className="flex items-center space-x-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input 
-                  type="text" 
-                  className="pl-10 pr-4 py-2 w-80 rounded-lg border border-gray-200 focus:border-green-500 focus:ring-1 focus:ring-green-500" 
-                  placeholder="Search here ..." 
+                <Input
+                  type="text"
+                  className="pl-10 pr-4 py-2 w-80 rounded-lg border border-gray-200 focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                  placeholder="Search here ..."
                 />
               </div>
             </div>
@@ -141,7 +141,7 @@ function Dashboard() {
               </div>
             </div>
           </header>
-          
+
           <div className="p-6 mt-16 space-y-6">
             {/* Welcome Section */}
             <div>
@@ -303,13 +303,13 @@ function Dashboard() {
                     <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="#10b981" stopOpacity={0.1}/>
+                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#10b981" stopOpacity={0.1} />
                         </linearGradient>
                       </defs>
-                      <XAxis 
-                        dataKey="name" 
-                        axisLine={false} 
+                      <XAxis
+                        dataKey="name"
+                        axisLine={false}
                         tickLine={false}
                         tick={{ fontSize: 12, fill: '#6b7280' }}
                       />
@@ -408,18 +408,16 @@ function Dashboard() {
                         <td className="px-6 py-4 text-sm font-medium text-gray-900">RWF {item.price}</td>
                         <td className="px-6 py-4 text-sm text-gray-600">{item.location}</td>
                         <td className="px-6 py-4">
-                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                            item.status === 'Active' ? 'bg-green-100 text-green-700' :
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${item.status === 'Active' ? 'bg-green-100 text-green-700' :
                             item.status === 'Sold' ? 'bg-blue-100 text-blue-700' :
-                            'bg-yellow-100 text-yellow-700'
-                          }`}>
+                              'bg-yellow-100 text-yellow-700'
+                            }`}>
                             {item.status}
                           </span>
                         </td>
                         <td className="px-6 py-4">
-                          <button className={`text-sm font-medium ${
-                            item.action === 'Edit' ? 'text-blue-600 hover:text-blue-900' : 'text-green-600 hover:text-green-900'
-                          }`}>
+                          <button className={`text-sm font-medium ${item.action === 'Edit' ? 'text-blue-600 hover:text-blue-900' : 'text-green-600 hover:text-green-900'
+                            }`}>
                             {item.action}
                           </button>
                         </td>

@@ -72,7 +72,7 @@ const Logo = () => (
       <Leaf className="w-5 h-5 text-green-600" />
     </div>
     <span className="font-bold text-xl text-white">
-      FarmLink
+      UmuhinziLink
     </span>
   </div>
 );

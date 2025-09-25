@@ -49,16 +49,15 @@ export default function SettingsPage() {
           <nav className="flex-1 px-4 space-y-2">
             {menuItems.map((m, index) => {
               const isActive = m.label === "Settings";
-              const showDivider = index === 4 || index === 8; 
+              const showDivider = index === 4 || index === 8;
               return (
                 <div key={m.label}>
                   <Link href={m.href} className="block">
                     <div
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium ${
-                        isActive
-                          ? "bg-green-600 text-white shadow-sm"
-                          : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                      }`}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-sm font-medium ${isActive
+                        ? "bg-green-600 text-white shadow-sm"
+                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                        }`}
                     >
                       <m.icon className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-500"}`} />
                       <span>{m.label}</span>
